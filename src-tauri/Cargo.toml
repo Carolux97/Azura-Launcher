@@ -1,0 +1,71 @@
+[package]
+name = "azura-launcher"
+version = "0.6.8"
+description = "Launcher for the Azura native port"
+authors = ["Azura contributors"]
+license = "PolyForm-Strict-1.0.0"
+edition = "2024"
+rust-version = "1.90"
+
+[lib]
+# The library holds the app so the same code can later back other entry points; main.rs only calls it.
+name = "azura_launcher_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+# The development launcher, "Azura (DEV)": built with tauri.dev.conf.json by
+# `scripts/build-launcher.sh --dev`. It keeps its own saves folder and never updates itself.
+dev = []
+
+[build-dependencies]
+tauri-build = { version = "2.7.1", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+# The diagnostic file cleans private data out of logs with patterns (diagnostics.rs).
+regex = "1.13"
+# Waiting between reconnections of Alboria's events channel; the version Tauri already uses.
+tokio = { version = "1.53.3", features = ["time"] }
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+tauri = { version = "2.12.1", features = [] }
+tauri-plugin-log = "2"
+tauri-plugin-dialog = "2.8.1"
+sha2 = "0.10.9"
+base64 = "0.22.1"
+libc = "0.2"
+toml = "1.1.8"
+toml_edit = "0.25.17"
+tauri-plugin-updater = "2.13.1"
+# Opening alboria.org in the system browser (lib.rs, open_alboria_site): only from Rust, with the
+# address fixed there, so the interface cannot open any other address.
+tauri-plugin-opener = "=2.7.1"
+# Alboria accounts (alboria.rs): HTTPS requests and Ed25519 signatures with the rustls and ring
+# stack the updater already brings, so no other TLS or crypto library comes in.
+reqwest = { version = "0.13.5", default-features = false, features = ["json", "rustls-no-provider"] }
+rustls = { version = "0.23.46", default-features = false, features = ["ring"] }
+ring = "0.17.14"
+# Downloadable content shared as a .zip around the package (dlc.rs), read, and the diagnostic file
+# (diagnostics.rs), written: deflate entries only.
+zip = { version = "4.6.1", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+
+# Controllers, to navigate the launcher (gamepad.rs): Apple's GameController framework on macOS,
+# gilrs elsewhere.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+block2 = "0.6"
+objc2-foundation = "0.3"
+objc2-game-controller = "0.3"
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+gilrs = "0.11"
+
+# The processor, memory and graphics cards on Windows (system.rs): the registry, the memory status
+# and SetupAPI's display adapters.
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-sys = { version = "0.61", features = [
+  "Win32_Foundation",
+  "Win32_System_Registry",
+  "Win32_System_SystemInformation",
+  "Win32_Devices_DeviceAndDriverInstallation",
+] }

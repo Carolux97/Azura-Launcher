@@ -1,0 +1,74 @@
+# Runs the launcher's tests (JavaScript and Rust) on macOS, Linux and Windows for every pull request,
+# to main or stacked on another pull request's branch. Not on pushes to main (what reaches main has
+# passed them in its pull request). The runtime is not built here: it lives in the private Azura
+# runtime repository and needs the game's default.xex.
+
+name: Launcher tests
+
+on:
+  pull_request:
+
+# The workflow only reads the repository.
+permissions:
+  contents: read
+
+# A new push to the same branch or pull request cancels the run still in progress for it.
+concurrency:
+  group: launcher-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    strategy:
+      # Every platform reports its result even when another one fails.
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos
+            runner: macos-latest
+          - name: ubuntu
+            runner: ubuntu-latest
+          # Its image has LLVM's clang and Visual Studio, the compiler the launcher builds with there.
+          - name: windows
+            runner: windows-latest
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      # The JavaScript tests use Node's own test runner and import nothing from npm, so no
+      # install step is needed. The "**" pattern in `npm test` needs Node 21 or later.
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: JavaScript tests
+        run: npm test
+
+      # Tauri links against the system's web view and GTK on Linux; gilrs (controllers) against
+      # libudev.
+      - name: Install the Linux libraries Tauri needs
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev \
+            librsvg2-dev libxdo-dev libssl-dev build-essential libudev-dev
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      # Keeps the compiled dependencies between runs, which turns a cold build of several
+      # minutes into a much shorter one.
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      # --locked uses the versions in Cargo.lock, as a local build does, and fails if it is out
+      # of date instead of changing it.
+      - name: Rust tests
+        working-directory: src-tauri
+        run: cargo test --locked

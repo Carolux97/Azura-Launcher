@@ -1,0 +1,1643 @@
+/*
+ * Azura launcher theme.
+ *
+ * Two looks share the window. The game's pages are dark steel cards lit by imulsion gold (the glow
+ * of the Lambent in Gears of War 3), with crimson only for warnings and bone white for text.
+ * Everything online is Alboria's, as on its website: places of its planet painted behind pearl glass,
+ * carved buttons and its rounded type, often with one of its Alborians (world/, from alboria-web). The launcher is always dark: it mirrors the game's mood,
+ * so it does not follow the system light theme.
+ *
+ * The window opens at 1200 × 760 and can shrink to 960 × 620 (tauri.conf.json): pages have two
+ * columns where there is room and one below about 1100 px, and never scroll sideways.
+ */
+
+:root {
+  /* Surfaces */
+  --bg-0: #0a0b0c;
+  --bg-1: #121416;
+  --well: #0f1113;
+  --panel-solid: #16181b;
+  --steel: #262a2f;
+  --steel-line: #363b42;
+  --steel-hi: #4a5058;
+
+  /* Text */
+  --text: #ece6da;
+  --text-soft: #c9c2b5;
+  --text-dim: #a29c90;
+  --text-faint: #6d6960;
+
+  /* Imulsion (accent) */
+  --imulsion: #ffb81c;
+  --imulsion-hot: #ffe08a;
+  --imulsion-deep: #d9750a;
+  --imulsion-glow: rgba(255, 184, 28, 0.45);
+  --gold-fill: linear-gradient(180deg, #ffd25a, var(--imulsion) 60%, var(--imulsion-deep));
+
+  /* States */
+  --crimson: #b3202a;
+  --ok: #8fbf6a;
+
+  /* Alboria's palette (alboria-web's src/styles/global.css) */
+  --navy: #1e2a4f;
+  --night-soft: #4a5a85;
+  --sky: #9fd3ff;
+  --sky-deep: #5aa9f0;
+  --sky-line: #b8daf8;
+  --paper: #e3f2ff;
+  --sun: #ffc93c;
+  --sun-light: #ffe07a;
+
+  /* Type */
+  /* The display fonts only cover Latin. The browser falls back per character, so Cyrillic is
+     drawn with Oswald (condensed, close in style) and Japanese, Korean and Chinese with the macOS
+     system fonts listed in --font-cjk. */
+  --font-cjk: "Hiragino Sans", "PingFang TC", "Apple SD Gothic Neo", sans-serif;
+  --font-display: "Teko", "Oswald", var(--font-cjk);
+  --font-stencil: "Saira Stencil One", "Teko", "Oswald", var(--font-cjk);
+  --font-ui: "Barlow Condensed", "Oswald", var(--font-cjk);
+  --font-body: "Barlow", system-ui, var(--font-cjk);
+  /* Alboria's rounded type, as on alboria.org: the system's rounded face (SF Pro Rounded on
+     macOS), else the first rounded font installed, else the system's own. Nothing is bundled. */
+  --font-alb: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Nunito", "Varela Round", system-ui, var(--font-cjk), sans-serif;
+  /* Alboria's ink, and its ring rune (the logo in outline, in the official logo's proportions) in the
+     colours of its seals. */
+  --ink-alb: #18223f;
+  --rune-ring-light: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22 stroke=%22%23d9f1ff%22 stroke-width=%222.2%22 stroke-linecap=%22round%22%3E%3Cdefs%3E%3CclipPath id=%22b%22%3E%3Cpath clip-rule=%22evenodd%22 d=%22M-4 -4H36V16H-4Z M16 7.79a8.21 8.21 0 1 0 0.01 0Z%22/%3E%3C/clipPath%3E%3CclipPath id=%22f%22%3E%3Crect x=%22-4%22 y=%2216%22 width=%2240%22 height=%2220%22/%3E%3C/clipPath%3E%3C/defs%3E%3Cg transform=%22rotate(-18 16 16)%22%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%2213%22 ry=%224.1%22 clip-path=%22url(%23b)%22/%3E%3C/g%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%228.21%22/%3E%3Cg transform=%22rotate(-18 16 16)%22%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%2213%22 ry=%224.1%22 clip-path=%22url(%23f)%22/%3E%3C/g%3E%3C/svg%3E");
+  --rune-ring-warm: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22 stroke=%22%23fff4c2%22 stroke-width=%222.2%22 stroke-linecap=%22round%22%3E%3Cdefs%3E%3CclipPath id=%22b%22%3E%3Cpath clip-rule=%22evenodd%22 d=%22M-4 -4H36V16H-4Z M16 7.79a8.21 8.21 0 1 0 0.01 0Z%22/%3E%3C/clipPath%3E%3CclipPath id=%22f%22%3E%3Crect x=%22-4%22 y=%2216%22 width=%2240%22 height=%2220%22/%3E%3C/clipPath%3E%3C/defs%3E%3Cg transform=%22rotate(-18 16 16)%22%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%2213%22 ry=%224.1%22 clip-path=%22url(%23b)%22/%3E%3C/g%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%228.21%22/%3E%3Cg transform=%22rotate(-18 16 16)%22%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%2213%22 ry=%224.1%22 clip-path=%22url(%23f)%22/%3E%3C/g%3E%3C/svg%3E");
+  --rune-ring-gold: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22 stroke=%22%23c98a10%22 stroke-width=%222.2%22 stroke-linecap=%22round%22%3E%3Cdefs%3E%3CclipPath id=%22b%22%3E%3Cpath clip-rule=%22evenodd%22 d=%22M-4 -4H36V16H-4Z M16 7.79a8.21 8.21 0 1 0 0.01 0Z%22/%3E%3C/clipPath%3E%3CclipPath id=%22f%22%3E%3Crect x=%22-4%22 y=%2216%22 width=%2240%22 height=%2220%22/%3E%3C/clipPath%3E%3C/defs%3E%3Cg transform=%22rotate(-18 16 16)%22%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%2213%22 ry=%224.1%22 clip-path=%22url(%23b)%22/%3E%3C/g%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%228.21%22/%3E%3Cg transform=%22rotate(-18 16 16)%22%3E%3Cellipse cx=%2216%22 cy=%2216%22 rx=%2213%22 ry=%224.1%22 clip-path=%22url(%23f)%22/%3E%3C/g%3E%3C/svg%3E");
+
+  --rail-width: 232px;
+
+  color-scheme: dark;
+}
+
+/* Han characters are shared by Chinese and Japanese but drawn differently, so each language puts
+   its own system font first. */
+:root:lang(zh-Hant) { --font-cjk: "PingFang TC", "Hiragino Sans", "Apple SD Gothic Neo", sans-serif; }
+:root:lang(ko) { --font-cjk: "Apple SD Gothic Neo", "Hiragino Sans", "PingFang TC", sans-serif; }
+
+/* Wide letter spacing suits condensed Latin capitals but breaks up CJK text. The brand name is
+   always Latin, so it keeps it. */
+:lang(ja) :not(.brand-name),
+:lang(ko) :not(.brand-name),
+:lang(zh) :not(.brand-name) { letter-spacing: 0.02em; }
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background:
+    radial-gradient(900px 600px at 90% -10%, rgba(255, 184, 28, 0.16), transparent 70%),
+    radial-gradient(120% 90% at 85% 100%, #2a1a08 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.45;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+
+code, kbd {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.86em;
+  background: var(--steel);
+  border: 1px solid var(--steel-line);
+  border-radius: 4px;
+  padding: 0 0.35em;
+}
+
+:focus-visible { outline: 2px solid var(--imulsion); outline-offset: 2px; }
+
+/* Read by screen readers, not drawn. */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Controller ---------- */
+
+/* While a controller drives the launcher (gamepadNav.js), the focus is the only cursor: a ring
+   that reads from the sofa, on every control, whatever focused it. */
+.pad-mode :focus { outline: 3px solid var(--imulsion); outline-offset: 3px; box-shadow: 0 0 18px var(--imulsion-glow); }
+.pad-mode .toggle input:focus + .toggle-ui { outline: 3px solid var(--imulsion); outline-offset: 3px; box-shadow: 0 0 18px var(--imulsion-glow); }
+.pad-mode .toggle input:focus { outline: none; box-shadow: none; }
+.pad-mode .tile:focus { outline: none; box-shadow: none; }
+.pad-mode .tile:focus .medal { outline: 3px solid var(--imulsion); outline-offset: 3px; box-shadow: 0 0 18px var(--imulsion-glow); }
+.pad-mode .ach:focus { outline-offset: -2px; box-shadow: none; background: rgba(255, 184, 28, 0.08); }
+/* On Alboria's light panels the gold ring reads poorly: navy instead. */
+.pad-mode .is-alboria :focus { outline-color: var(--navy); box-shadow: 0 0 0 6px rgba(90, 169, 240, 0.45); }
+
+.pad-hints {
+  position: fixed;
+  right: 24px;
+  bottom: 18px;
+  z-index: 70;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  padding: 9px 16px;
+  background: rgba(10, 11, 12, 0.86);
+  border: 1px solid var(--steel-line);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.pad-hints[hidden] { display: none; }
+.pad-hint { display: inline-flex; align-items: center; gap: 8px; }
+.pad-glyphs { display: inline-flex; gap: 4px; }
+.pad-glyphs svg { height: 24px; width: auto; display: block; }
+
+/* The on-screen keyboard (virtualKeyboard.js): over the whole window, the keys in rows. */
+.vkbd {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 6, 7, 0.72);
+  backdrop-filter: blur(4px);
+}
+.vkbd-panel {
+  display: grid;
+  gap: 14px;
+  padding: 22px 24px 24px;
+  background: var(--panel-solid);
+  border: 1px solid var(--steel-line);
+  border-top: 2px solid rgba(255, 184, 28, 0.45);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+.vkbd-title { font-family: var(--font-ui); font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+.vkbd-display {
+  position: relative;
+  min-height: 46px;
+  padding: 10px 70px 10px 14px;
+  font-family: var(--font-body);
+  font-size: 22px;
+  color: var(--text);
+  background: var(--well);
+  border: 1px solid var(--steel-line);
+  border-radius: 10px;
+  white-space: pre;
+}
+.vkbd-display::after { content: attr(data-count); position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--text-faint); }
+.vkbd-keys { display: grid; gap: 8px; }
+.vkbd-row { display: flex; gap: 8px; justify-content: center; }
+.vkbd-key {
+  min-width: 46px;
+  height: 46px;
+  padding: 0 10px;
+  font-family: var(--font-ui);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--steel);
+  border: 1px solid var(--steel-line);
+  border-radius: 9px;
+}
+.vkbd-key:hover { border-color: var(--steel-hi); }
+.vkbd-key:disabled { opacity: 0.28; cursor: default; }
+.vkbd-key.is-wide { min-width: 110px; font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; }
+.vkbd-key.is-on { color: #16181b; background: var(--imulsion); border-color: var(--imulsion); }
+
+/* ---------- Backdrop ---------- */
+
+.backdrop { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+.veins { position: absolute; inset: 0; }
+.vein-layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.vein {
+  fill: none;
+  stroke: var(--imulsion-hot);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  opacity: 0.95;
+}
+.vein.v2 { stroke-width: 1.6; }
+.vein.v3 { stroke-width: 1.1; }
+.is-dim .vein { stroke: var(--imulsion-deep); opacity: 0.35; }
+
+/* The hot layers fade in and out over the dim one, each group of veins at its own time. Only their
+   opacity changes, which the compositor does without drawing the veins or their glow again. With
+   reduced motion they rest halfway. */
+.vein-layer.is-hot {
+  opacity: 0.5;
+  will-change: opacity;
+  animation: pulse 5s ease-in-out infinite;
+}
+.vein-layer.hot-2 { animation-delay: -1.7s; }
+.vein-layer.hot-3 { animation-delay: -3.1s; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 1; }
+}
+
+.spores { position: absolute; inset: 0; overflow: hidden; }
+
+.spore {
+  position: absolute;
+  bottom: -10px;
+  width: var(--size, 3px);
+  height: var(--size, 3px);
+  border-radius: 50%;
+  background: var(--imulsion-hot);
+  box-shadow: 0 0 8px 2px var(--imulsion-glow);
+  opacity: 0;
+  animation: drift var(--dur, 14s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes drift {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  10%  { opacity: 0.9; }
+  80%  { opacity: 0.6; }
+  100% { transform: translate(var(--dx, 40px), -105vh); opacity: 0; }
+}
+
+/* Film grain keeps the dark gradients from banding and adds a gritty texture. */
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Shell and rail ---------- */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--rail-width) 1fr;
+  height: 100vh;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  padding: 26px 14px 18px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(14, 15, 17, 0.92), rgba(10, 11, 12, 0.96));
+  border-right: 1px solid var(--steel-line);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; padding: 0 10px; }
+
+/* Original emblem: a cog ring with an imulsion core, turning slowly. */
+.brand-mark {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--imulsion-hot) 0 22%, var(--imulsion) 23% 32%, transparent 33%),
+    repeating-conic-gradient(var(--steel-hi) 0 15deg, transparent 15deg 30deg);
+  -webkit-mask: radial-gradient(circle, #000 0 62%, transparent 63% 70%, #000 71%);
+  mask: radial-gradient(circle, #000 0 62%, transparent 63% 70%, #000 71%);
+  filter: drop-shadow(0 0 6px var(--imulsion-glow));
+  animation: spin 40s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.brand-name {
+  font-family: var(--font-stencil);
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Under the brand: a pill with Alboria's planet that opens alboria.org (account.js). */
+.alboria-chip {
+  display: flex; flex: none; align-self: flex-start; align-items: center; gap: 8px; margin: 12px 0 2px 10px;
+  padding: 5px 14px 5px 6px; white-space: nowrap;
+  background: rgba(227, 242, 255, 0.06); border: 1px solid var(--steel-line); border-radius: 999px;
+  color: var(--text-dim); font-family: var(--font-alb); font-weight: 700; font-size: 14px;
+}
+.alboria-chip svg { width: 24px; height: 24px; }
+.alboria-chip:hover, .alboria-chip:focus-visible { color: var(--sun-light); border-color: var(--sky-deep); }
+
+/* Alboria's state under its chip (renderService): a dot and a short line. */
+.alboria-state {
+  display: flex; align-items: center; gap: 8px; min-height: 18px; margin: 2px 0 8px 18px;
+  font-family: var(--font-ui); font-weight: 600; font-size: 14px; letter-spacing: 0.06em; color: var(--text-faint);
+}
+.alboria-state[hidden] { display: none; }
+.alboria-state .dot { width: 8px; height: 8px; margin: 0; border-radius: 50%; background: var(--text-faint); box-shadow: none; }
+.alboria-state[data-state="ok"] .dot { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.alboria-state[data-state="warn"] { color: var(--sun); }
+.alboria-state[data-state="warn"] .dot { background: var(--sun); box-shadow: 0 0 8px var(--sun); }
+
+.nav { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 2px; }
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 14px;
+  background: none;
+  border: 0;
+  border-radius: 10px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-item > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-icon { flex: none; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nav-item:hover { color: var(--text); background: rgba(255, 255, 255, 0.03); }
+.nav-item.is-active {
+  color: var(--imulsion-hot);
+  background: linear-gradient(90deg, rgba(255, 184, 28, 0.18), transparent);
+  box-shadow: inset 3px 0 0 var(--imulsion);
+}
+.nav-item .lock { width: 14px; height: 14px; flex: none; color: var(--text-faint); }
+.nav-item.is-locked:not(.is-active) { color: var(--text-dim); }
+
+.tag {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 1px 6px;
+  border: 1px solid var(--steel-hi);
+  border-radius: 999px;
+  color: var(--text-faint);
+}
+
+.rail-foot { margin-top: auto; display: grid; gap: 4px; padding: 14px 10px 0; }
+
+/* Update available: a golden button above the version that breathes until it is pressed. */
+.update-chip {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--gold-fill);
+  color: #16181b;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 0 24px rgba(255, 184, 28, 0.25);
+  animation: breathe-gold 2.6s ease-in-out infinite;
+}
+@keyframes breathe-gold { 50% { box-shadow: 0 0 34px rgba(255, 184, 28, 0.55); } }
+.update-chip[hidden] { display: none; }
+.update-chip:hover:not([disabled]) { filter: brightness(1.1); }
+.update-chip[disabled] { cursor: progress; animation: none; }
+/* Disabled while the game runs: not busy, just waiting (the tooltip says why). */
+.update-chip[disabled][title]:not([title=""]) { cursor: not-allowed; opacity: 0.55; }
+.update-confirm { margin: -2px 0 12px; padding: 10px 12px; border: 1px solid var(--imulsion); border-radius: 12px; background: rgba(255, 184, 28, 0.06); }
+.update-confirm[hidden] { display: none; }
+.update-confirm p { font-size: 13px; line-height: 1.4; color: var(--text-dim); }
+.update-confirm-actions { display: grid; gap: 6px; margin-top: 8px; }
+.update-confirm-actions .btn { width: 100%; justify-content: center; white-space: normal; }
+
+.rail-language { margin-bottom: 8px; }
+.rail-language select { padding: 6px 30px 6px 10px; font-size: 13px; }
+.version { font-family: var(--font-ui); font-weight: 600; font-size: 14px; letter-spacing: 0.06em; color: var(--text-faint); }
+.version-link {
+  margin-left: 6px;
+  padding: 0;
+  font: inherit;
+  color: var(--imulsion);
+  background: none;
+  border: 0;
+}
+.version-link:hover { text-decoration: underline; }
+.version-link[hidden] { display: none; }
+
+/* ---------- Content ---------- */
+
+.content { position: relative; min-width: 0; overflow-x: hidden; overflow-y: auto; padding: 40px 52px 60px; }
+
+.view { display: none; max-width: 1180px; }
+.view.is-active { display: block; animation: enter 0.35s ease both; }
+@keyframes enter { from { opacity: 0; transform: translateY(8px); } }
+
+/* The player's line: top right, beside the page's title. */
+.player-line {
+  position: absolute; top: 28px; right: 44px; z-index: 2; display: flex; align-items: center; gap: 10px;
+  max-width: 46%; font-family: var(--font-ui); font-weight: 600; font-size: 18px; letter-spacing: 0.04em; color: var(--text-dim);
+}
+.player-line[hidden] { display: none; }
+.player-line > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-line .dot { width: 10px; height: 10px; margin: 0; background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+.player-line[data-state="local"] .dot,
+.player-line[data-state="off"] .dot { background: var(--text-faint); box-shadow: none; }
+.player-line[data-state="warn"] .dot { background: var(--sun); box-shadow: 0 0 10px var(--sun); }
+
+/* ---------- Type ---------- */
+
+.page-head { margin-bottom: 26px; }
+.eyebrow {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--imulsion);
+}
+.page-title {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 0.85;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.page-title em { font-style: normal; color: var(--imulsion); }
+.lede { margin-top: 12px; max-width: 680px; font-size: 21px; line-height: 1.4; color: var(--text-soft); }
+
+.panel-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.help { margin: 6px 0 14px; font-size: 16px; line-height: 1.4; color: var(--text-dim); }
+.tagline { font-family: var(--font-alb); font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #c98a10; }
+.is-error { color: #ff8888; }
+
+/* ---------- Panels ---------- */
+
+/* The game's parts: a steel card with a gold seam along its top. */
+.panel {
+  position: relative;
+  margin-bottom: 18px;
+  padding: 20px 22px;
+  background: linear-gradient(180deg, rgba(38, 42, 47, 0.92), rgba(22, 24, 27, 0.92));
+  border: 1px solid var(--steel-line);
+  border-top: 2px solid rgba(255, 184, 28, 0.45);
+  border-radius: 18px;
+}
+.panel[hidden] { display: none; }
+/* A panel the player must act on first (the compiler, when Install waits for it). */
+.panel.is-attention { border-color: var(--imulsion); box-shadow: 0 0 0 1px var(--imulsion-glow) inset; }
+.panel-locked { opacity: 0.6; }
+
+/* Two columns of cards; one in narrow windows (see the end of the file). */
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.columns.is-wide-left { grid-template-columns: 1.2fr 1fr; }
+.columns > * { min-width: 0; }
+.column { display: flex; flex-direction: column; gap: 18px; }
+.columns .panel, .column .panel { margin-bottom: 0; }
+
+/* ---------- Alboria's panels ---------- */
+
+/* Alboria in the launcher looks as it does on its website (alboria-notes:alboria-web/design.md):
+   each panel is a place of the planet, painted behind it (--place, set by its place-* class), and
+   its content floats on pearl glass in front, framed by the painting. Buttons are carved stones in
+   a golden frame with a seal, inputs and rows are glass too, and the type is Alboria's rounded
+   face. */
+.panel.is-alboria {
+  position: relative; isolation: isolate; margin: 44px 16px 16px;
+  background: none; border: 0; border-radius: 26px;
+  color: var(--ink-alb); font-family: var(--font-alb);
+  box-shadow: none;
+}
+/* The place: the painting, a little larger than the glass, so it frames it. */
+.panel.is-alboria::before {
+  content: ""; position: absolute; inset: -16px; z-index: -2; border-radius: 38px;
+  background: linear-gradient(180deg, rgba(255, 248, 236, 0.1), rgba(30, 42, 79, 0.28)), var(--place, none) center / cover;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 26px 60px -20px rgba(0, 0, 0, 0.7);
+}
+/* The glass: pearl over the blurred place, a thin white edge. */
+.panel.is-alboria::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 242, 255, 0.74) 55%, rgba(236, 243, 252, 0.78));
+  backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 2px 0 #fff, 0 18px 40px -22px rgba(24, 34, 63, 0.55);
+}
+.place-arrival { --place: url("world/llegada-1280.webp"); }
+.place-plaza { --place: url("world/plaza-1280.webp"); }
+.place-gate { --place: url("world/portal.webp"); }
+.place-vault { --place: url("world/boveda.webp"); }
+.place-observatory { --place: url("world/observatorio.webp"); }
+.place-archive { --place: url("world/archivo-1280.webp"); }
+/* The place's name, as a tag of glass on the painting above the panel. */
+.alb-place {
+  position: absolute; left: 6px; top: -30px; z-index: 2; display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 12px 4px 6px; border-radius: 999px;
+  font-family: var(--font-alb); font-weight: 800; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-alb); background: rgba(255, 255, 255, 0.78); border: 1px solid rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 6px 18px -10px rgba(24, 34, 63, 0.5);
+}
+.alb-place::before { content: ""; width: 16px; height: 16px; background: var(--rune-ring-gold) center / contain no-repeat; }
+.is-alboria .panel-title { font-family: var(--font-alb); font-weight: 800; font-size: 28px; line-height: 1.15; letter-spacing: -0.01em; text-transform: none; color: var(--ink-alb); }
+.is-alboria .help { color: var(--night-soft); font-size: 16px; }
+.is-alboria .check { color: var(--night-soft); }
+
+/* Buttons of Alboria: a stone of light in a golden frame with an engraved groove, a leaf finial at
+   each end, and a seal with a rune on its left. Amber for the main action, mother-of-pearl for the
+   others; touched, it rises and a gleam runs across the stone. */
+.is-alboria .btn {
+  --stone: linear-gradient(180deg, #fff 0%, #f6f1ff 45%, #e6eefa 100%);
+  --frame: #d8b866; --frame-hi: #fff3cc; --halo: rgba(140, 180, 255, 0.45);
+  --seal-light: #2f5ea8; --seal-dark: #1b2f63; --seal-rune: var(--rune-ring-light);
+  --groove: rgba(216, 184, 102, 0.55);
+  position: relative; isolation: isolate;
+  padding: 7px 24px 7px 44px; margin: 0 10px; border: 0; border-radius: 999px; color: var(--ink-alb);
+  font-family: var(--font-alb); font-weight: 800; font-size: 16px; letter-spacing: 0.01em; text-transform: none;
+  /* The seal and its rune share one centre: the rune's box is centred in the seal's. */
+  --seal: radial-gradient(circle closest-side, var(--seal-light) 0, var(--seal-dark) 78%, var(--frame-hi) 82%, var(--frame-hi) 92%, transparent 97%);
+  background:
+    var(--seal-rune) 10px 50% / 20px 20px no-repeat,
+    var(--seal) 5px 50% / 30px 30px no-repeat,
+    linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.65) 50%, transparent 65%) 160% 0 / 250% 100% no-repeat,
+    var(--stone);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.85), inset 0 -3px 6px rgba(120, 70, 0, 0.2),
+    0 0 0 2px var(--frame-hi), 0 0 0 4px var(--frame), 0 0 0 5px rgba(80, 50, 10, 0.25), 0 10px 24px -8px var(--halo);
+  outline: 1px solid var(--groove); outline-offset: -5px;
+  transition: transform 0.2s, box-shadow 0.25s, background-position 0.7s ease;
+}
+.is-alboria .btn::before, .is-alboria .btn::after {
+  content: ""; position: absolute; top: 50%; width: 9px; height: 9px; z-index: -1;
+  background: linear-gradient(135deg, var(--frame-hi), var(--frame)); border-radius: 0 60% 0 60%; box-shadow: 0 0 8px var(--halo);
+}
+.is-alboria .btn::before { left: -9px; translate: 0 -50%; rotate: -45deg; }
+.is-alboria .btn::after { right: -9px; translate: 0 -50%; rotate: 135deg; }
+.is-alboria .btn:hover:not([disabled]) {
+  transform: translateY(-2px); color: var(--ink-alb); filter: none;
+  background-position: 10px 50%, 5px 50%, -60% 0, 0 0;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -3px 6px rgba(120, 70, 0, 0.18),
+    0 0 0 2px var(--frame-hi), 0 0 0 4px var(--frame), 0 0 0 5px rgba(80, 50, 10, 0.25), 0 14px 32px -6px var(--halo), 0 0 24px var(--halo);
+}
+.is-alboria .btn:active:not([disabled]) { transform: translateY(0) scale(0.98); }
+.is-alboria .btn-primary {
+  --stone: linear-gradient(180deg, #fff3c4 0%, #ffd866 45%, #f4b33a 100%);
+  --frame: #c99838; --frame-hi: #ffe9a8; --halo: rgba(255, 196, 70, 0.55);
+  --seal-light: #8a5a12; --seal-dark: #5a3a0a; --seal-rune: var(--rune-ring-warm); --groove: rgba(255, 255, 255, 0.55);
+  color: #2b1d04;
+}
+.is-alboria .btn.btn-primary:hover:not([disabled]) { color: #2b1d04; }
+.is-alboria .btn-danger {
+  --stone: linear-gradient(180deg, #fff 0%, #fdeff0 50%, #f6dfe2 100%);
+  --seal-light: #b3202a; --seal-dark: #7a1119;
+  color: var(--crimson);
+}
+.is-alboria .btn.btn-danger:hover:not([disabled]) { color: var(--crimson); }
+.is-alboria .btn-small { padding: 4px 16px 4px 36px; margin: 0 8px; font-size: 14px; background-position: 8px 50%, 3px 50%, 160% 0, 0 0; background-size: 16px 16px, 26px 26px, 250% 100%, auto; }
+.is-alboria .btn-small:hover:not([disabled]) { background-position: 8px 50%, 3px 50%, -60% 0, 0 0; }
+.is-alboria .btn[disabled] { opacity: 0.45; }
+.is-alboria .path,
+.is-alboria select,
+.is-alboria textarea {
+  background: rgba(255, 255, 255, 0.86); border: 1px solid rgba(216, 184, 102, 0.75); border-radius: 16px; color: var(--ink-alb);
+  font-family: var(--font-alb); font-weight: 700; font-size: 17px; box-shadow: inset 0 2px 4px rgba(24, 34, 63, 0.08);
+}
+.is-alboria .path:focus, .is-alboria .path:hover, .is-alboria select:hover { border-color: #c99838; box-shadow: inset 0 2px 4px rgba(24, 34, 63, 0.08), 0 0 0 3px rgba(255, 214, 120, 0.35); }
+.is-alboria .path[readonly] { color: var(--night-soft); font-weight: 600; }
+.is-alboria .field > span { font-family: var(--font-alb); font-weight: 800; letter-spacing: 0.12em; color: #c98a10; }
+
+/* An Alborian floats gently over its panel. */
+.alborian { display: block; flex: none; height: auto; animation: hover 4.5s ease-in-out infinite; }
+@keyframes hover { 50% { transform: translateY(-8px); } }
+
+/* ---------- Play ---------- */
+
+.play-row { display: flex; gap: 22px; align-items: stretch; margin-bottom: 26px; }
+.launch { display: flex; flex-direction: column; gap: 10px; justify-content: center; align-items: center; flex: none; }
+
+/* Play: a big golden button that breathes. Install: the same button in steel with a gold outline,
+   so it reads as a step to complete rather than as the action to play. */
+.btn-launch {
+  padding: 18px 86px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--gold-fill);
+  color: #16181b;
+  box-shadow: 0 0 24px rgba(255, 184, 28, 0.25);
+  animation: breathe 3.2s ease-in-out infinite;
+  transition: filter 0.15s, transform 0.15s;
+}
+.btn-launch:hover:not([disabled]) { filter: brightness(1.1); }
+.btn-launch:active:not([disabled]) { transform: translateY(1px); }
+.btn-launch[disabled] { cursor: progress; animation: none; filter: saturate(0.6) brightness(0.85); }
+.btn-launch.is-install { background: var(--steel); color: var(--imulsion); box-shadow: inset 0 0 0 2px var(--imulsion); animation: none; }
+.btn-launch.is-install:hover { color: var(--imulsion-hot); }
+.btn-launch:focus-visible,
+.pad-mode .btn-launch:focus { outline: 3px solid #fff6dc; outline-offset: 4px; }
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 18px rgba(255, 184, 28, 0.3); }
+  50%      { box-shadow: 0 0 44px rgba(255, 184, 28, 0.65); }
+}
+.btn-launch-label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.btn-launch-sub[hidden] { display: none; }
+.btn-launch-sub {
+  max-width: 300px;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* What's new: Alboria's panel with the Greeter, beside the button. */
+/* The "What's new" window: over the launcher, on a dimmed backdrop, under the welcome page (which
+   comes first on a first start). The list scrolls inside it, so a long changelog never pushes the
+   page around. */
+.notes-dialog {
+  position: fixed; inset: 0; z-index: 35; display: flex; align-items: center; justify-content: center;
+  padding: 40px 52px; background: rgba(9, 14, 36, 0.55);
+}
+.notes-dialog[hidden] { display: none; }
+.notes-box {
+  width: min(820px, 100%); max-height: 100%; margin: 0; display: flex; align-items: flex-start; gap: 8px;
+  padding: 16px 24px 18px 6px;
+}
+.notes-box .alborian { width: 104px; flex: none; align-self: center; }
+.release-notes-text { flex: 1; min-width: 0; max-height: calc(100vh - 116px); display: flex; flex-direction: column; }
+.release-notes-text .btn { align-self: flex-start; }
+.release-notes-list {
+  margin: 4px 0 12px; padding: 0 8px 0 18px; display: grid; gap: 4px; color: var(--navy); font-size: 16px;
+  line-height: 1.35; overflow-y: auto; min-height: 0;
+}
+.release-notes-list li::marker { color: var(--sky-deep); }
+
+/* The game's parts on the left, Alboria on the right while it has something to show. */
+.play-grid { display: grid; grid-template-columns: 1fr; gap: 22px; align-items: start; }
+.play-grid:has(> .play-side > .panel:not([hidden])) { grid-template-columns: 1fr 420px; }
+.play-grid > * { min-width: 0; }
+.play-main { display: flex; flex-direction: column; gap: 18px; }
+.play-main > .panel { margin-bottom: 0; }
+.play-side { display: flex; flex-direction: column; gap: 18px; }
+.play-side > .panel { margin-bottom: 0; }
+/* The Keeper stands on the friends panel's corner, so the panel leaves it room above. */
+.play-side > .friends-panel { margin-top: 76px; }
+
+/* The state of each part, as tiles: three columns, two beside Alboria's column. */
+.status-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.play-grid:has(> .play-side > .panel:not([hidden])) .status-tiles { grid-template-columns: repeat(2, 1fr); }
+.status-tiles .status {
+  display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 10px 14px;
+  background: rgba(15, 17, 19, 0.88); border: 1px solid #2b2f34; border-radius: 12px;
+}
+.status-tiles .status[hidden] { display: none; }
+.status-tiles .status strong {
+  font-family: var(--font-ui); font-weight: 600; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint);
+}
+.status-tiles .status-detail {
+  font-family: var(--font-ui); font-weight: 600; font-size: 19px; line-height: 1.2; letter-spacing: 0.02em; color: var(--ok); overflow-wrap: anywhere;
+}
+.status-tiles .status[data-state="warn"] .status-detail { color: #ff8a8f; }
+.status-tiles .status[data-state="pending"] .status-detail,
+.status-tiles .status[data-state="progress"] .status-detail { color: var(--imulsion); }
+.status-tiles .status[data-state="progress"] .status-detail { animation: status-progress 2.4s ease-in-out infinite; }
+
+/* Status lines with a light (the downloadable content list). */
+.status-list { display: grid; gap: 10px; }
+/* Report a problem: the files a diagnostic file would hold, each with a box (diagnostics.js). */
+.diagnostic-list { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
+.diagnostic-entry { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; font-size: 15px; }
+.diagnostic-entry input { grid-row: span 2; }
+.diagnostic-name { font-family: var(--font-mono, monospace); overflow-wrap: anywhere; }
+.diagnostic-entry small { color: var(--text-soft); }
+#diagnostic-result { overflow-wrap: anywhere; }
+#diagnostic-show { margin-top: 10px; }
+#diagnostic-show[hidden] { display: none; }
+.status-list[hidden] { display: none; }
+.status { display: flex; gap: 12px; align-items: flex-start; }
+.status[hidden] { display: none; }
+.status strong { display: block; font-family: var(--font-ui); font-weight: 600; font-size: 17px; letter-spacing: 0.04em; }
+.status span:not(.dot) { font-size: 14px; color: var(--text-dim); }
+.dlc-list { margin: 16px 0 18px; }
+.dlc-list .status { padding: 10px 14px; background: var(--well); border: 1px solid #2b2f34; border-radius: 12px; }
+.dlc-list .status strong { font-family: var(--font-ui); font-size: 19px; letter-spacing: 0.02em; }
+/* Remove, at the end of an installed package's row. */
+.dlc-list .status > div { flex: 1; min-width: 0; }
+.dlc-list .status .btn { align-self: center; }
+
+.dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 8px var(--ok);
+}
+.status[data-state="warn"] .dot { background: var(--crimson); box-shadow: 0 0 8px var(--crimson); }
+/* Something is under way (the runtime being built): amber, fading slowly in and out. */
+.status[data-state="progress"] .dot {
+  background: var(--imulsion);
+  box-shadow: 0 0 8px var(--imulsion-glow);
+  animation: status-progress 2.4s ease-in-out infinite;
+}
+/* Nothing is running, but a step is still pending (installed content waiting for the runtime update): steady amber. */
+.status[data-state="pending"] .dot { background: var(--imulsion); box-shadow: 0 0 8px var(--imulsion-glow); }
+@keyframes status-progress { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* Why online rooms are out of reach, with its Alborian. */
+.service-panel { display: flex; align-items: center; gap: 10px; padding: 18px 22px 18px 6px; }
+.service-panel .alborian { width: 100px; }
+.service-panel-text { flex: 1; min-width: 0; }
+.service-panel .help { margin: 6px 0 0; }
+.service-panel .account-actions { margin-top: 12px; }
+
+/* ---------- Friends (friendsPanel.js) ---------- */
+
+.friends-panel { padding: 22px 22px 18px; }
+.friends-panel .keeper { position: absolute; right: -10px; top: -96px; width: 104px; }
+.friends-head { padding-right: 70px; }
+.friends-count { font-size: 15px; font-weight: 800; color: #3f8fe0; }
+.friends-add { display: flex; gap: 8px; margin: 14px 0 12px; }
+.friends-add .path { flex: 1; padding: 7px 12px; font-size: 16px; }
+.friends-section { margin: 14px 4px 6px; font-family: var(--font-alb); font-weight: 800; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #c98a10; }
+.friend { display: grid; gap: 6px; margin-bottom: 8px; }
+/* When the panel is too narrow for the name beside the pill and the buttons, the buttons go to a
+   second line, on the right, instead of squeezing the name into a column of single letters. */
+.friend-row {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px 12px; padding: 9px 10px;
+  background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(255, 255, 255, 0.95); border-radius: 20px;
+}
+/* A seal with Alboria's ring rune before rows without a friend's picture: amber pulsing for a request
+   waiting for an answer, grey otherwise. Friends' rows show their picture instead (.friend-avatar). */
+.friend-row::before {
+  --seal: radial-gradient(circle at 40% 35%, #8e9ab8, #4c5778 75%);
+  content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--rune-ring-light) center / 18px 18px no-repeat, var(--seal);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35), 0 0 0 2px #fff3cc, 0 0 0 3px #d8b866;
+}
+/* A friend's picture: a round, metallic golden frame around it (a default silhouette until players
+   have avatars), and at its top right a smaller golden setting, sunk inwards, holding a light in the
+   colour of the friend's state: green online, red busy, off (dark, no shine) offline or invisible.
+   The seal of the rows without a friend (requests) is not drawn on these. */
+.friend-row.has-avatar::before { display: none; }
+.friend-avatar {
+  position: relative; flex: none; width: 40px; height: 40px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 38%, #eef1f7 0 7px, transparent 7.5px),
+    radial-gradient(ellipse 12px 9px at 50% 92%, #eef1f7 0 100%, transparent 100%),
+    radial-gradient(circle at 40% 30%, #a9bad6, #6f84a8 80%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35), 0 0 0 2px #7a5210, 0 0 0 4px #f3c969, 0 0 0 5px #b07a1e,
+    0 2px 6px rgba(60, 40, 0, 0.3);
+}
+/* The setting's centre sits on the golden frame at 45 degrees: the frame's middle is 23px from the
+   picture's centre (20px of picture and 3px into the 5px frame), 16.3px across and up from it. */
+.friend-avatar::after {
+  content: ""; position: absolute; top: calc(20px - 16.3px - 4.5px); left: calc(20px + 16.3px - 4.5px);
+  width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e9fff5 0 1.5px, #1fb37e 2.5px, #12795a 100%);
+  box-shadow: 0 0 0 2px #7a5210, 0 0 0 4px #f3c969, 0 0 0 5px #b07a1e, inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.friend-avatar[data-light="busy"]::after { background: radial-gradient(circle at 35% 30%, #ffe3de 0 1.5px, #e0503f 2.5px, #a8322a 100%); }
+.friend-avatar[data-light="off"]::after { background: radial-gradient(circle at 50% 50%, #5a647e, #3a4259 100%); }
+/* The availability control: a pill in the colour of the state chosen (green online, red busy, slate
+   invisible), with a dot before the text and an arrow after it, so the state reads at a glance. */
+.friends-availability { position: relative; display: inline-flex; align-items: center; margin-top: 8px; }
+.friends-availability::before {
+  content: ""; position: absolute; left: 12px; top: 50%; width: 8px; height: 8px; margin-top: -4px;
+  border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35); pointer-events: none;
+}
+.friends-availability::after {
+  content: ""; position: absolute; right: 12px; top: 50%; width: 6px; height: 6px; margin-top: -5px;
+  border-right: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(45deg); pointer-events: none;
+}
+.friends-availability select {
+  appearance: none; -webkit-appearance: none; padding: 5px 32px 5px 28px; border: 0; border-radius: 999px;
+  background: #12795a; color: #fff; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(20, 30, 60, 0.18);
+}
+.friends-availability select:focus-visible { outline: 3px solid #ffd866; outline-offset: 2px; }
+.friends-availability select[data-state="online"] { background: #12795a; }
+.friends-availability select[data-state="busy"] { background: #a8322a; }
+.friends-availability select[data-state="invisible"] { background: #4c5778; }
+.friends-availability option { color: #1b2340; background: #fff; }
+.friends-body > .friend-row::before { --seal: radial-gradient(circle at 40% 35%, #ffd866, #c98a10 75%); animation: status-progress 1.6s ease-in-out infinite; }
+.friend-text { flex: 1 1 150px; min-width: 0; }
+.friend-text strong { display: block; font-size: 17px; overflow-wrap: anywhere; }
+.friend-text small { display: block; font-size: 14px; color: var(--night-soft); }
+.friend-pill { flex: none; padding: 3px 10px; border: 1px solid rgba(124, 92, 224, 0.35); border-radius: 999px; background: rgba(124, 92, 224, 0.1); font-weight: 800; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #7c5ce0; }
+.is-alboria .btn.friend-more { min-width: 34px; padding: 3px 10px; margin: 0 6px; background: rgba(255, 255, 255, 0.6); box-shadow: 0 0 0 1px rgba(216, 184, 102, 0.6); outline: 0; color: var(--night-soft); font-size: 18px; }
+.is-alboria .btn.friend-more::before, .is-alboria .btn.friend-more::after { display: none; }
+/* With its menu open the button is marked, a carved stone of amber in its golden frame, and shows an
+   arrow that folds the menu. */
+.is-alboria .btn.friend-more.is-open {
+  background: linear-gradient(180deg, #fff3c4 0%, #ffd866 45%, #f4b33a 100%); color: #2b1d04;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 0 0 2px #ffe9a8, 0 0 0 4px #c99838, 0 0 18px rgba(255, 196, 70, 0.55);
+}
+.friend-more .fold-arrow { display: block; width: 18px; height: 18px; margin: 0 auto; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.friend-menu, .friend-report { display: flex; flex-wrap: wrap; gap: 10px 6px; padding: 10px 12px; background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(216, 184, 102, 0.7); border-radius: 18px; }
+.friend-report textarea { flex: 1 1 100%; min-height: 60px; resize: vertical; }
+.friend-report select { flex: 1 1 100%; }
+
+/* ---------- Form controls ---------- */
+
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
+.field-grid.one { grid-template-columns: 1fr; }
+
+.field { display: grid; gap: 6px; min-width: 0; }
+.field[hidden] { display: none; }
+.field > span {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.field output { color: var(--imulsion); }
+
+select, .path, textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 14px;
+  background: var(--well);
+  border: 1px solid var(--steel-line);
+  border-radius: 10px;
+  color: var(--text-soft);
+  font-size: 16px;
+  transition: border-color 0.15s;
+}
+select {
+  appearance: none;
+  padding-right: 34px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-dim) 50%), linear-gradient(135deg, var(--text-dim) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+select:hover, .path:hover { border-color: var(--steel-hi); }
+.path { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; }
+
+.path-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+.path-row > .path, .path-row > select { flex: 1 1 200px; width: auto; }
+.path-row[hidden] { display: none; }
+#saves-conflict { margin-top: 12px; }
+
+/* Folder check result: a coloured dot like a status light, then the message. */
+.check { display: flex; align-items: center; gap: 10px; margin: 12px 0 0; font-family: var(--font-ui); font-weight: 600; font-size: 18px; letter-spacing: 0.02em; color: var(--text-soft); }
+/* The display rule above would otherwise override the hidden attribute. */
+.check[hidden] { display: none; }
+.check::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.check[data-state="error"] { color: var(--text); }
+.check[data-state="error"]::before { background: var(--crimson); box-shadow: 0 0 8px var(--crimson); }
+.check[data-state="warn"]::before { background: var(--imulsion); box-shadow: 0 0 8px var(--imulsion-glow); }
+/* A status line sharing a row with its button. */
+.path-row .check { flex: 1 1 220px; margin: 0; }
+
+/* Details of an unsupported edition, selectable as one block for pasting into a report. */
+.edition-report { margin-top: 14px; padding: 14px 16px; background: var(--well); border: 1px solid rgba(255, 184, 28, 0.5); border-radius: 12px; }
+.edition-report[hidden] { display: none; }
+.edition-report .help { margin: 0 0 10px; font-size: 15px; }
+.edition-report-details {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--bg-0);
+  border: 1px solid var(--steel-line);
+  border-radius: 8px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-all;
+  user-select: all;
+}
+.edition-report .path-row { margin-top: 10px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: none;
+  padding: 9px 18px;
+  background: var(--steel);
+  border: 1px solid var(--steel-hi);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: filter 0.15s, transform 0.15s, border-color 0.15s;
+}
+.btn[hidden] { display: none; }
+.btn:hover:not([disabled]) { filter: brightness(1.2); }
+.btn:active:not([disabled]) { transform: translateY(1px); }
+.btn[disabled] { cursor: not-allowed; opacity: 0.45; }
+.btn-primary { background: var(--gold-fill); color: #16181b; border: 0; box-shadow: 0 0 24px rgba(255, 184, 28, 0.25); }
+.btn-danger { border-color: rgba(179, 32, 42, 0.8); color: #ff8a8f; }
+.btn-small, .btn-sm { padding: 5px 13px; font-size: 15px; }
+
+/* A setting: what it is and what it does on the left, its control on the right. */
+.setting-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.setting-row {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin-top: 14px;
+  padding: 14px 16px; background: var(--well); border: 1px solid #2b2f34; border-radius: 12px;
+}
+.setting-list .setting-row { margin-top: 0; }
+.setting-row[hidden] { display: none; }
+.setting-text { flex: 1 1 200px; min-width: 0; }
+.setting-text strong { display: block; font-family: var(--font-ui); font-weight: 600; font-size: 19px; letter-spacing: 0.02em; }
+.setting-text small { display: block; font-size: 14px; color: var(--text-dim); }
+.setting-row > select { flex: 0 1 260px; width: auto; }
+
+/* A <select> drawn as buttons (selectMirror.js): the select itself is not shown. */
+select[data-mirror] { display: none; }
+
+/* Segmented buttons: the choices of a setting, the achievements' views and their filters. */
+.segmented { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: var(--well); border: 1px solid var(--steel-line); border-radius: 12px; }
+.segmented[hidden] { display: none; }
+.segmented button {
+  padding: 8px 18px;
+  background: none;
+  border: 0;
+  border-radius: 9px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.segmented button:hover { color: var(--text); }
+.segmented button.is-on { background: linear-gradient(180deg, #ffd25a, var(--imulsion)); color: #16181b; }
+.segmented button small { margin-left: 6px; font-size: 0.85em; opacity: 0.7; }
+
+/* A list to pick one from (the render resolutions). */
+.pick-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.pick-list .pick {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 12px 16px;
+  background: var(--well); border: 1px solid #2b2f34; border-radius: 12px; text-align: left;
+  font-family: var(--font-ui); font-weight: 600; font-size: 19px; letter-spacing: 0.02em; color: var(--text);
+}
+.pick-list .pick:hover { border-color: var(--steel-hi); }
+.pick-list .pick.is-on { border-color: var(--imulsion); box-shadow: 0 0 0 3px rgba(255, 184, 28, 0.15); }
+.pick-list .pick.is-on::after { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--imulsion); box-shadow: 0 0 8px var(--imulsion-glow); }
+
+input[type="range"] { width: 100%; accent-color: var(--imulsion); }
+
+.toggle { display: flex; align-items: center; gap: 12px; cursor: pointer; align-self: end; padding-bottom: 6px; }
+.toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle-ui { position: relative; flex: none; width: 40px; height: 20px; background: var(--bg-0); border: 1px solid var(--steel-hi); border-radius: 999px; transition: background 0.15s, border-color 0.15s; }
+.toggle-ui::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--text-faint); transition: transform 0.15s, background 0.15s, box-shadow 0.15s; }
+.toggle input:checked + .toggle-ui { border-color: var(--imulsion); background: rgba(255, 184, 28, 0.12); }
+.toggle input:checked + .toggle-ui::after { transform: translateX(20px); background: var(--imulsion); box-shadow: 0 0 8px var(--imulsion-glow); }
+.toggle input:focus-visible + .toggle-ui { outline: 2px solid var(--imulsion); outline-offset: 2px; }
+
+/* ---------- Runtime build, shaders and the game log ---------- */
+
+.build-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.build-card-percent { font-family: var(--font-display); font-size: 34px; line-height: 1; color: var(--imulsion-hot); }
+.build-card.is-failed .build-card-percent { color: var(--text-faint); }
+.build-bar { height: 10px; margin: 12px 0 8px; overflow: hidden; background: var(--well); border: 1px solid var(--steel-line); border-radius: 99px; }
+.build-bar[hidden] { display: none; }
+.build-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--imulsion-deep), var(--imulsion), var(--imulsion-hot));
+  box-shadow: 0 0 14px var(--imulsion-glow);
+  transition: width 0.4s ease-out;
+}
+.build-card.is-failed .build-bar span { background: var(--steel-hi); box-shadow: none; }
+.build-card-detail { margin: 0; word-break: break-word; }
+.build-card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.build-card-actions[hidden] { display: none; }
+
+.log-head { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 10px; }
+.log-state { flex: 1; font-size: 15px; color: var(--text-dim); }
+.log-state[data-state="error"] { color: #ff8a8f; }
+.log-state[data-state="ok"] { color: var(--ok); }
+.log-body {
+  max-height: 240px;
+  margin: 0;
+  padding: 12px 14px;
+  overflow: auto;
+  background: #0b0c0d;
+  border: 1px solid var(--steel-line);
+  border-radius: 10px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-soft);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.log-body:empty { display: none; }
+.log-body .stderr { color: #e8a0a0; }
+
+/* ---------- Installation ---------- */
+
+/* The compiler's buttons, below its state, wrapping in narrow windows. */
+.compiler-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+/* The command to install the compiler by hand: selectable, and wrapped when it is long. */
+.compiler-manual { margin: 12px 0 0; }
+.compiler-manual code { display: block; margin-top: 4px; user-select: all; word-break: break-all; color: var(--text); }
+.compiler-manual[hidden] { display: none; }
+
+/* ---------- Saves ---------- */
+
+.panel-head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 16px; margin-bottom: 14px; }
+.panel-head-row > div:first-child { flex: 1 1 260px; min-width: 0; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--steel-hi);
+  border-radius: 999px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.status-badge .dot { margin: 0; background: var(--text-faint); box-shadow: none; }
+.status-badge[data-state="ok"] { border-color: rgba(143, 191, 106, 0.6); color: var(--ok); }
+.status-badge[data-state="ok"] .dot { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.status-badge[data-state="warn"] { border-color: rgba(255, 184, 28, 0.6); color: var(--imulsion); }
+.status-badge[data-state="warn"] .dot { background: var(--imulsion); box-shadow: 0 0 8px var(--imulsion-glow); }
+.status-badge[data-state="error"] { border-color: var(--crimson); color: #ff8a8f; }
+.status-badge[data-state="error"] .dot { background: var(--crimson); box-shadow: 0 0 8px var(--crimson); }
+
+/* The saves' state, large: a lit plate and its word. */
+.save-status { gap: 14px; margin: 4px 0 14px; padding: 0; border: 0; font-family: var(--font-ui); font-size: 26px; letter-spacing: 0.02em; text-transform: none; white-space: normal; }
+.save-status .dot {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; box-shadow: none; background: var(--steel-hi);
+  font-family: var(--font-body); font-weight: 600; font-size: 28px; line-height: 1; color: #16181b;
+}
+/* The plate's mark: ✓ fine, ! broken checkpoints, · nothing saved yet. */
+.save-status .dot::after { content: "·"; color: var(--text); }
+.save-status[data-state="ok"] .dot::after { content: "✓"; color: #16181b; }
+.save-status[data-state="warn"] .dot::after { content: "!"; color: #16181b; }
+.save-status[data-state="ok"] .dot { background: radial-gradient(circle at 50% 40%, #c8e6a8, var(--ok)); box-shadow: 0 0 18px rgba(143, 191, 106, 0.35); }
+.save-status[data-state="warn"] .dot { background: radial-gradient(circle at 50% 40%, var(--imulsion-hot), var(--imulsion)); box-shadow: 0 0 18px var(--imulsion-glow); }
+
+.save-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.metric-card { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; background: var(--well); border: 1px solid #2b2f34; border-radius: 12px; }
+.metric-label { font-family: var(--font-ui); font-weight: 600; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); }
+.metric-value { font-family: var(--font-ui); font-weight: 600; font-size: 20px; color: var(--text); }
+
+.save-detail-msg { margin: 0 0 12px; font-size: 15px; color: var(--text-dim); }
+.save-detail-msg:empty { display: none; }
+.save-detail-msg.is-error { color: #ff8a8f; }
+.is-alboria .save-detail-msg { color: var(--night-soft); }
+.is-alboria .save-detail-msg.is-error { color: var(--crimson); font-weight: 700; }
+
+.save-actions-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.action-card {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 16px; padding: 14px 16px;
+  background: var(--well); border: 1px solid #2b2f34; border-radius: 12px;
+}
+.action-card-info { flex: 1 1 220px; min-width: 0; }
+.action-card-info strong { display: block; font-family: var(--font-ui); font-weight: 600; font-size: 19px; letter-spacing: 0.02em; color: var(--text); }
+.action-card-info .help { margin: 0; font-size: 14px; }
+/* A long label (a language with long words) wraps inside the card instead of running past its edge. */
+.action-card > .btn { max-width: 100%; white-space: normal; text-align: center; }
+
+.backups-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.backups-list > .help { margin: 0; }
+.backup-item {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px;
+  background: var(--well); border: 1px solid #2b2f34; border-radius: 12px;
+}
+.backup-item-title { font-family: var(--font-ui); font-weight: 600; font-size: 18px; color: var(--text); }
+.backup-item-meta { font-size: 14px; color: var(--text-dim); }
+
+/* ---------- Achievements ---------- */
+
+.ach-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px; }
+
+.ach-filters { margin-bottom: 16px; }
+.ach-empty { margin: 4px 0; }
+
+/* Medals: the game's artwork in a ring, gold once unlocked; dimmed while locked. */
+.medal {
+  --medal-size: 56px;
+  flex: none;
+  width: var(--medal-size);
+  height: var(--medal-size);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #0b0c0d;
+  border: 2px solid var(--steel-line);
+  transition: transform 0.15s;
+}
+.medal img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.medal svg { width: 100%; height: 100%; }
+.medal .medal-fill { fill: var(--steel-hi); }
+.medal .medal-line { stroke: var(--steel-hi); }
+.medal .medal-question { font-family: var(--font-display); font-size: 30px; }
+.medal.is-unlocked { border-color: var(--imulsion); box-shadow: 0 0 14px rgba(255, 184, 28, 0.35); }
+.medal.is-unlocked .medal-fill { fill: var(--imulsion); }
+.medal.is-unlocked .medal-line { stroke: var(--imulsion); }
+.medal.is-locked img { filter: grayscale(1) brightness(0.5); }
+
+/* The list (the list view and the sections of the view by acts). */
+.ach-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.ach { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: var(--well); border: 1px solid #2b2f34; border-radius: 12px; }
+.ach-text { flex: 1; min-width: 0; }
+.ach-name { font-family: var(--font-ui); font-weight: 600; font-size: 20px; line-height: 1.15; letter-spacing: 0.02em; }
+.ach-desc { margin-top: 1px; font-size: 15px; color: var(--text-dim); }
+.ach.is-locked .ach-name,
+.ach.is-hidden .ach-name { color: var(--text-dim); }
+.ach.is-locked .ach-desc,
+.ach.is-hidden .ach-desc { color: var(--text-faint); }
+.ach.is-hidden .ach-name { font-style: italic; }
+.ach-g { flex: none; min-width: 48px; text-align: right; font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--imulsion-hot); }
+.ach-g small { margin-left: 2px; font-size: 16px; color: var(--text-dim); }
+.ach.is-locked .ach-g,
+.ach.is-hidden .ach-g { color: var(--text-faint); }
+.ach-when { display: grid; flex: none; min-width: 96px; text-align: right; font-family: var(--font-ui); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+.ach-when b { font-weight: 600; color: var(--text-dim); }
+.ach-list.is-compact .ach { gap: 10px; padding: 8px 10px; }
+.ach-list.is-compact .ach-name { font-size: 16px; }
+.ach-list.is-compact .ach-desc { font-size: 13px; }
+.ach-list.is-compact .ach-g { min-width: 36px; font-size: 22px; }
+
+/* The grid of badges: the medal and its gamerscore; the card over it tells the rest. */
+.ach-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 14px; }
+.tile { position: relative; display: grid; justify-items: center; gap: 6px; padding: 4px 0; text-align: center; outline: none; }
+.tile .medal { --medal-size: 72px !important; }
+.tile:hover .medal, .tile:focus-visible .medal { transform: scale(1.08); }
+.tile:focus-visible .medal { outline: 2px solid var(--imulsion); outline-offset: 3px; }
+.tile-g { font-family: var(--font-display); font-size: 20px; line-height: 1; color: var(--imulsion-hot); }
+.tile.is-locked .tile-g,
+.tile.is-hidden .tile-g { color: var(--text-faint); }
+
+/* The card of a badge, over the grid while it is hovered or focused (placed by achievementsPage.js). */
+.ach-tooltip {
+  --arrow-x: 50%;
+  position: fixed;
+  z-index: 40;
+  width: 270px;
+  padding: 12px 14px 11px;
+  background: #0b0c0d;
+  border: 1px solid var(--imulsion);
+  border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 184, 28, 0.12);
+  pointer-events: none;
+  animation: ach-tooltip-in 0.12s ease-out;
+}
+.ach-tooltip[hidden] { display: none; }
+.ach-tooltip.is-locked,
+.ach-tooltip.is-hidden { border-color: var(--steel-hi); }
+/* The arrow, a small rotated square on the edge that faces the badge. */
+.ach-tooltip::after {
+  content: "";
+  position: absolute;
+  left: var(--arrow-x);
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  border: inherit;
+  border-radius: 0;
+  border-top: 0;
+  border-left: 0;
+  transform: translateX(-50%) rotate(45deg);
+}
+.ach-tooltip.is-below::after { top: -6px; bottom: auto; transform: translateX(-50%) rotate(225deg); }
+.ach-tooltip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.ach-tooltip-name { font-family: var(--font-ui); font-weight: 700; font-size: 18px; letter-spacing: 0.02em; }
+.ach-tooltip-g { flex: none; font-family: var(--font-display); font-size: 22px; color: var(--imulsion-hot); }
+.ach-tooltip-g small { margin-left: 2px; font-size: 13px; color: var(--text-dim); }
+.ach-tooltip.is-locked .ach-tooltip-g,
+.ach-tooltip.is-hidden .ach-tooltip-g { color: var(--text-faint); }
+.ach-tooltip.is-hidden .ach-tooltip-name { font-style: italic; color: var(--text-dim); }
+.ach-tooltip-desc { margin: 4px 0 8px; font-size: 14px; line-height: 1.35; color: var(--text-dim); }
+.ach-tooltip-status { display: flex; gap: 6px; font-family: var(--font-ui); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+.ach-tooltip-status b { font-weight: 600; color: var(--text-dim); }
+.ach-tooltip.is-unlocked .ach-tooltip-status { color: var(--imulsion); }
+@keyframes ach-tooltip-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Every view: the Embry Star column on the left, the filters and the achievements on the right. */
+.ach-columns { display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
+.ach-columns > * { min-width: 0; }
+.ach-side { position: sticky; top: 0; display: flex; flex-direction: column; gap: 18px; }
+.ach-side > .panel, .ach-main { margin-bottom: 0; }
+
+/* The Embry Star card: the badge, what earns it, the gamerscore and its bar. */
+.embry-card { text-align: center; }
+.embry-badge { position: relative; z-index: 0; width: 140px; margin: 8px auto 0; }
+.embry-badge svg { display: block; width: 100%; }
+.embry-badge.is-dim svg { filter: grayscale(1) brightness(0.62); }
+.embry-title { margin-top: 14px; font-family: var(--font-display); font-weight: 600; font-size: 34px; line-height: 1; text-transform: uppercase; }
+.embry-hint { margin: 6px 0 0; font-size: 15px; }
+.embry-g { margin-top: 10px; font-family: var(--font-display); font-size: 44px; line-height: 1; }
+.embry-g b { font-weight: 600; color: var(--imulsion-hot); }
+.embry-g small { font-size: 22px; color: var(--text-dim); }
+.embry-bar { height: 10px; margin: 12px 0 8px; overflow: hidden; background: var(--well); border: 1px solid var(--steel-line); border-radius: 99px; }
+.embry-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--imulsion-deep), var(--imulsion), var(--imulsion-hot)); box-shadow: 0 0 14px var(--imulsion-glow); }
+.embry-bar.is-thin { height: 8px; margin: 10px 0 12px; }
+.embry-count { font-family: var(--font-ui); font-weight: 600; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); }
+
+/* Every achievement unlocked: a banner, a halo with slow rays behind the badge, a gold border on
+   the card and a shine running along the full bar. */
+.embry-banner {
+  margin: 0 0 18px;
+  padding: 12px 18px;
+  border: 1px solid var(--imulsion);
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(255, 184, 28, 0.18), rgba(255, 184, 28, 0.04));
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--imulsion-hot);
+}
+.embry-banner small { margin-left: 14px; font-weight: 600; font-size: 15px; letter-spacing: 0.08em; color: var(--text-dim); }
+.embry-card.is-earned { border-color: var(--imulsion); box-shadow: 0 0 0 1px rgba(255, 184, 28, 0.25) inset, 0 0 36px rgba(255, 184, 28, 0.14); }
+.embry-card.is-earned .embry-badge svg { filter: drop-shadow(0 0 14px rgba(235, 238, 245, 0.55)) drop-shadow(0 0 28px rgba(255, 184, 28, 0.35)); }
+.embry-card.is-earned .embry-badge::before {
+  content: "";
+  position: absolute;
+  inset: -26%;
+  z-index: -1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 224, 138, 0.28) 0 6deg, transparent 6deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 30%, transparent 68%);
+  mask: radial-gradient(circle, #000 30%, transparent 68%);
+  animation: spin 28s linear infinite;
+}
+.embry-card.is-earned .embry-core { fill: var(--imulsion-hot); }
+.embry-card.is-earned .embry-g b { text-shadow: 0 0 18px var(--imulsion-glow); }
+.embry-card.is-earned .embry-bar span {
+  background: linear-gradient(90deg, var(--imulsion-deep), var(--imulsion), var(--imulsion-hot), var(--imulsion)) 0 0 / 200% 100%;
+  animation: embry-shine 3.2s linear infinite;
+}
+@keyframes embry-shine { to { background-position: -200% 0; } }
+
+/* The view by acts: a card per section inside the main card. */
+.ach-sections { display: flex; flex-direction: column; gap: 14px; }
+.ach-section { padding: 16px 18px; background: var(--well); border: 1px solid #2b2f34; border-radius: 14px; }
+.ach-section .ach { background: rgba(255, 255, 255, 0.02); }
+.ach-section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+.ach-section-head .panel-title { font-size: 30px; }
+.ach-section-head .help { margin: 2px 0 0; }
+.ach-section-count { flex: none; font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--imulsion-hot); }
+
+/* The page without the game: dimmed medals behind a card with a lock. */
+.ach-stage { position: relative; }
+.ach-ghost { opacity: 0.5; filter: saturate(0.4); }
+.ach-gate {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  width: min(460px, 86%);
+  margin: 0;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(14, 15, 17, 0.96);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+}
+.ach-gate .lock { display: block; width: 34px; height: 34px; margin: 0 auto 8px; color: var(--imulsion); }
+.ach-gate .panel-title { font-size: 30px; }
+.ach-detail { margin: -6px 0 14px; font-size: 12px; color: var(--text-faint); word-break: break-word; }
+.skeleton { height: 12px; margin: 6px 0; border-radius: 6px; background: rgba(255, 255, 255, 0.08); }
+.skeleton.is-small { height: 9px; opacity: 0.7; }
+.skeleton.is-g { flex: none; width: 46px; height: 22px; }
+
+/* ---------- Account (account.js) ---------- */
+
+.account-title-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+/* alboria.org: Alboria's pastel blue, so it stands out on the dark launcher. */
+/* alboria.org: a mother-of-pearl stone in a golden frame, the logo in it. */
+.btn.alboria-open {
+  font-family: var(--font-alb); font-weight: 800; letter-spacing: 0; text-transform: none; color: var(--ink-alb);
+  background: linear-gradient(180deg, #fff 0%, #f6f1ff 45%, #e6eefa 100%); border: 0; border-radius: 999px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), 0 0 0 2px #fff3cc, 0 0 0 4px #d8b866, 0 10px 24px -8px rgba(140, 180, 255, 0.45);
+}
+.btn.alboria-open:hover:not([disabled]) { filter: brightness(1.04); transform: translateY(-2px); }
+.alboria-open svg { width: 20px; height: 20px; }
+
+/* The Greeter stands on the identity panel's corner, so the panels leave it room above. */
+.account-grid { grid-template-columns: 1.25fr 1fr; margin-top: 110px; }
+.account-identity .greeter { position: absolute; right: 0; top: -122px; width: 150px; }
+.account-identity .panel-head-row { padding-right: 40px; }
+.account-badge { flex: none; }
+.is-alboria .status-badge { font-family: var(--font-alb); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; color: var(--night-soft); border-color: var(--sky-line); background: #fff; }
+.is-alboria .status-badge[data-state="ok"] { color: #4c7a2c; border-color: rgba(143, 191, 106, 0.8); }
+.is-alboria .status-badge[data-state="warn"] { color: #a86f00; border-color: var(--sun); }
+.is-alboria .status-badge[data-state="warn"] .dot { background: var(--sun); box-shadow: none; }
+.is-alboria .status-badge[data-state="error"],
+.is-alboria .status-badge[data-state="none"] { color: var(--crimson); border-color: rgba(179, 32, 42, 0.6); }
+.is-alboria .status-badge[data-state="error"] .dot,
+.is-alboria .status-badge[data-state="none"] .dot { background: var(--crimson); box-shadow: none; }
+
+/* The player's identity, Gamertag#tag, large; the tag in Alboria's gold, dim while unknown. */
+.identity-card {
+  display: flex; align-items: baseline; gap: 2px; margin: 4px 0 12px; padding: 12px 18px;
+  background: #fff; border: 2px solid var(--sky-line); border-radius: 14px;
+  font-family: var(--font-alb); font-weight: 800; font-size: 34px; line-height: 1.1; color: var(--navy);
+  overflow-wrap: anywhere;
+}
+.identity-tag { color: #c98a10; }
+.identity-tag.is-unknown { color: #a9b6cc; }
+
+.account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.account-actions:not(:has(> :not([hidden]))) { display: none; }
+
+.device-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.device { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border-radius: 14px; }
+.device-info { display: grid; gap: 2px; min-width: 0; }
+.device-info strong { font-size: 17px; }
+.device-info span { color: var(--night-soft); font-size: 14px; }
+.device-current { flex: none; padding: 3px 10px; border: 1px solid var(--sky-deep); border-radius: 999px; color: var(--sky-deep); font-weight: 700; font-size: 13px; }
+
+.data-panel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 20px; margin-top: 18px; }
+.data-panel > div:first-child { flex: 1 1 260px; }
+.data-panel .help { margin-bottom: 0; }
+.data-panel .account-actions { margin-top: 0; }
+
+/* A local account: the Greeter beside what it means. */
+.account-local { display: flex; align-items: center; gap: 20px; max-width: 920px; padding: 26px 30px 26px 10px; }
+.account-local .alborian { width: 160px; }
+.account-local-text { flex: 1; min-width: 0; }
+
+/* An account whose email is not verified yet: when it must be verified by, and the button to. */
+.verify-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--imulsion);
+  border-radius: 12px;
+  background: var(--well);
+}
+.verify-notice[hidden] { display: none; }
+.play-verify { margin: 0; }
+.verify-notice .dot { margin-top: 0; background: var(--imulsion); box-shadow: 0 0 8px var(--imulsion-glow); }
+.verify-notice p { flex: 1 1 220px; margin: 0; font-size: 14px; line-height: 1.45; color: var(--text); }
+.is-alboria .verify-notice { background: rgba(255, 201, 60, 0.25); border-color: var(--sun); }
+.is-alboria .verify-notice p { color: var(--navy); }
+
+/* While Alboria sends no codes: a note in the create and sign-in steps (account.js, refreshCodes). */
+.codes-off-note { margin: 4px 0 12px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 201, 60, 0.25); color: var(--navy); font-size: 14px; line-height: 1.45; }
+
+/* ---------- Welcome (account.js) ---------- */
+
+/* The welcome page and the account's dialogs: over the whole window, on the backdrop. The launcher
+   behind it is not drawn meanwhile, so only the veins and spores show through. */
+.welcome { position: fixed; inset: 0; z-index: 40; overflow-y: auto; padding: 40px 52px 48px; }
+.welcome[hidden] { display: none; }
+body:has(> .welcome:not([hidden])) .shell { visibility: hidden; }
+.welcome-page { max-width: 1180px; margin: 0 auto; }
+/* The account's own dialogs (change the email, delete the account) have no welcome to say. */
+.welcome:is([data-at-step="email"], [data-at-step="delete"]) .welcome-head { display: none; }
+.welcome-wrap { display: flex; gap: 40px; align-items: stretch; }
+.welcome-box { flex: 1; min-width: 0; margin: 0; padding: 28px 32px; display: flex; flex-direction: column; }
+.welcome-box > [data-step] { display: flex; flex-direction: column; gap: 14px; }
+.welcome-box > [data-step][hidden] { display: none; }
+.welcome-box .help, .welcome-box .account-actions { margin: 0; }
+.welcome-box.is-busy { cursor: progress; }
+.welcome-choices { display: grid; gap: 12px; }
+.choice {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; padding: 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.95); border-radius: 22px; background: rgba(255, 255, 255, 0.72);
+  color: var(--ink-alb); font-family: var(--font-alb); text-align: left; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.25s, background 0.2s;
+}
+/* The main choice wears the golden frame of Alboria's carved pieces. */
+.choice.is-main { background: rgba(255, 255, 255, 0.92); box-shadow: 0 0 0 2px #fff3cc, 0 0 0 3.5px #d8b866, 0 0 26px rgba(255, 214, 120, 0.5); }
+.choice-text { display: grid; gap: 2px; min-width: 0; }
+.choice strong { font-weight: 800; font-size: 21px; }
+.choice-text > span { font-size: 15px; color: var(--night-soft); }
+.choice-arrow { flex: none; font-size: 30px; line-height: 1; color: #c98a10; }
+.choice:hover, .choice:focus-visible {
+  transform: translateY(-2px); background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 2px #fff3cc, 0 0 0 3.5px #d8b866, 0 0 26px rgba(255, 214, 120, 0.5);
+}
+.consent-text { margin: 0; font-size: 14px; }
+.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--night-soft); }
+.consent input { margin-top: 3px; }
+
+/* The Alborian of the step, with its word in a bubble. */
+.welcome-side { flex: none; width: 320px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.welcome-side .alborian { width: 260px; }
+.bubble {
+  position: relative; max-width: 300px; margin: 0 0 8px 24px; padding: 14px 18px;
+  background: #fff; color: var(--navy); border: 2px solid var(--navy); border-radius: 18px;
+  font-family: var(--font-alb); font-weight: 700; font-size: 18px;
+}
+.bubble::after {
+  content: ""; position: absolute; left: 60px; bottom: -12px; width: 20px; height: 20px; background: #fff;
+  border-right: 2px solid var(--navy); border-bottom: 2px solid var(--navy); transform: rotate(45deg);
+}
+/* Which word and which Alborian: the Courier brings the code, the Greeter everything else. */
+.bubble > span, .welcome-side [data-who] { display: none; }
+.welcome [data-bubble="greet"], .welcome [data-who="greeter"] { display: block; }
+.welcome[data-at-step="code"] [data-bubble="greet"], .welcome[data-at-step="code"] [data-who="greeter"] { display: none; }
+.welcome[data-at-step="code"] [data-bubble="code"], .welcome[data-at-step="code"] [data-who="courier"] { display: block; }
+.welcome[data-at-step="done"] [data-bubble="greet"] { display: none; }
+.welcome[data-at-step="done"] [data-bubble="done"] { display: block; }
+.welcome:is([data-at-step="email"], [data-at-step="delete"]) .welcome-side { display: none; }
+
+/* The code: one field, drawn as six boxes that fill from the left. */
+.code-field { position: relative; display: inline-block; align-self: flex-start; margin: 4px 0; }
+.code-field input { position: absolute; inset: 0; width: 100%; opacity: 0; font-size: 16px; cursor: text; }
+.code-boxes { display: flex; gap: 10px; pointer-events: none; }
+.code-boxes span {
+  width: 54px; height: 64px; display: grid; place-items: center; background: #fff;
+  border: 2px solid var(--sky-line); border-radius: 14px; font-family: var(--font-alb); font-weight: 800; font-size: 30px; color: var(--navy);
+}
+.code-field:focus-within .code-boxes span.is-next { border-color: var(--sky-deep); }
+.code-field.is-error .code-boxes span { border-color: var(--crimson); }
+
+/* ---------- Alboria's notices ---------- */
+
+/* Above every page, under the player line: Alboria's notices with the Greeter, and the countdowns
+   before a scheduled action with a clock. */
+.alboria-notices { display: flex; flex-direction: column; gap: 10px; max-width: 1180px; margin: 0 0 26px; padding-top: 34px; }
+.alboria-notices[hidden] { display: none; }
+/* A notice from Alboria: a beam of pearl glass in Alboria's carved golden frame, its Greeter on it. */
+.alboria-notice {
+  display: flex; align-items: center; gap: 14px; padding: 4px 14px 6px 4px; margin: 0 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(247, 242, 255, 0.9) 55%, rgba(236, 243, 252, 0.92));
+  color: var(--ink-alb); border: 0; border-radius: 22px; font-family: var(--font-alb);
+  outline: 1px solid rgba(216, 184, 102, 0.55); outline-offset: -6px;
+  box-shadow: inset 0 2px 0 #fff, 0 0 0 2px #fff3cc, 0 0 0 4px #d8b866, 0 14px 34px -14px rgba(0, 0, 0, 0.6), 0 0 34px -12px rgba(255, 214, 120, 0.45);
+}
+.alboria-notice .alborian { width: 76px; margin: -6px 0 -8px; }
+.alboria-notice-text { flex: 1; min-width: 0; padding: 8px 0; }
+.alboria-notice-label { display: block; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #c98a10; }
+.alboria-notice-body { margin-top: 2px; font-size: 16px; line-height: 1.35; overflow-wrap: anywhere; }
+.alboria-notice-body :is(p, ul, ol, blockquote, pre, h1, h2, h3, h4, h5, h6) { margin: 4px 0 0; }
+.alboria-notice-body > :first-child { margin-top: 0; }
+.alboria-notice-body :is(h1, h2, h3, h4, h5, h6) { font-size: 18px; font-weight: 800; line-height: 1.2; }
+.alboria-notice-body :is(ul, ol) { padding-left: 22px; }
+.alboria-notice-body blockquote { padding-left: 10px; border-left: 3px solid var(--sky-deep); color: var(--night-soft); }
+.alboria-notice-body :is(code, kbd, pre) { font-family: ui-monospace, Menlo, monospace; font-size: 14px; background: rgba(30, 42, 79, 0.08); border: 0; border-radius: 6px; padding: 1px 5px; }
+.alboria-notice-body pre { padding: 6px 8px; white-space: pre-wrap; }
+.alboria-notice-body mark { background: var(--sun); color: var(--navy); border-radius: 3px; padding: 0 2px; }
+.alboria-notice-body hr { border: 0; border-top: 2px solid var(--sky-line); margin: 6px 0; }
+.alboria-notice-body a { color: var(--sky-deep); font-weight: 700; cursor: pointer; }
+.alboria-notice-close {
+  flex: none; width: 32px; height: 32px; border-radius: 50%; border: 0; color: #d9f1ff; font-size: 18px; line-height: 1;
+  background: radial-gradient(circle at 40% 35%, #2f5ea8, #1b2f63 75%); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 0 0 2px #fff3cc, 0 0 0 3px #d8b866;
+}
+.alboria-notice-close:hover, .alboria-notice-close:focus-visible { filter: brightness(1.15); }
+/* A countdown before a scheduled action: urgent, in the launcher's own colours, and not closable. */
+.alboria-notice.is-warning {
+  padding: 12px 18px; color: var(--text); outline: 0; box-shadow: none; border-radius: 16px;
+  background: linear-gradient(90deg, rgba(255, 201, 60, 0.2), rgba(255, 201, 60, 0.06)); border: 1px solid rgba(255, 201, 60, 0.7);
+}
+.alboria-notice.is-warning strong { font-weight: 800; font-size: 17px; }
+.alboria-notice-when { color: var(--sun); }
+.alboria-notice.is-warning small { display: block; margin-top: 2px; font-family: var(--font-body); font-size: 15px; color: var(--text-dim); }
+.alboria-notice-clock { position: relative; flex: none; width: 30px; height: 30px; border: 3px solid var(--sun); border-radius: 50%; animation: status-progress 2s ease-in-out infinite; }
+.alboria-notice-clock::before, .alboria-notice-clock::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 3px; border-radius: 2px; background: var(--sun); transform-origin: 50% 0;
+}
+.alboria-notice-clock::before { height: 9px; transform: translateX(-50%) rotate(180deg); }
+.alboria-notice-clock::after { height: 7px; transform: translateX(-50%) rotate(-90deg); }
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  z-index: 50;
+  right: 28px;
+  bottom: 28px;
+  max-width: 380px;
+  padding: 12px 18px;
+  background: #0b0c0d;
+  border: 1px solid var(--imulsion);
+  border-radius: 12px;
+  box-shadow: 0 0 30px var(--imulsion-glow);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.toast.is-visible { opacity: 1; transform: none; }
+
+/* ---------- Motion ---------- */
+
+/* See syncMotion in main.js: no animation runs while nobody sees it. The page's own short entrance
+   is the exception: paused at its start, a page shown while the window is in the background would
+   stay invisible. */
+.motion-paused *, .motion-paused *::before, .motion-paused *::after { animation-play-state: paused !important; }
+.motion-paused .view.is-active { animation-play-state: running !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .spores { display: none; }
+}
+
+/* ---------- Narrower windows ---------- */
+
+@media (max-width: 1240px) {
+  :root { --rail-width: 204px; }
+  .nav-item { gap: 12px; padding: 11px 12px; font-size: 17px; }
+  .content { padding: 32px 32px 48px; }
+  .page-title { font-size: 72px; }
+  .play-grid:has(> .play-side > .panel:not([hidden])) { grid-template-columns: 1fr 370px; }
+  .btn-launch { padding: 16px 60px; }
+  .btn-launch-label { font-size: 34px; }
+  .welcome { padding: 32px 32px 40px; }
+}
+
+/* One column: the player's line on its own row, the Play button above What's new, both at full
+   width, and Alboria's column before the game's tiles. */
+@media (max-width: 1100px) {
+  .player-line { position: static; justify-content: flex-end; max-width: none; margin-bottom: 6px; font-size: 16px; }
+  .alboria-notices { padding-top: 6px; }
+  .page-title { font-size: 62px; }
+  .lede { font-size: 18px; }
+  .eyebrow { font-size: 17px; letter-spacing: 0.2em; }
+  .panel-title { font-size: 30px; }
+  .play-row { flex-direction: column; align-items: stretch; gap: 16px; }
+  .launch { flex-direction: row; justify-content: flex-start; gap: 16px; }
+  .btn-launch { padding: 12px 48px; }
+  .btn-launch-label { font-size: 30px; }
+  .btn-launch-sub { text-align: left; }
+  /* One column: the game's details first, then Alboria (its state and the friends) below them. */
+  .play-grid:has(> .play-side > .panel:not([hidden])) { grid-template-columns: 1fr; }
+  .columns, .columns.is-wide-left, .account-grid { grid-template-columns: 1fr; }
+  .ach-columns { grid-template-columns: 240px 1fr; }
+  .embry-title { font-size: 30px; }
+  .embry-g { font-size: 38px; }
+  .segmented button { padding: 7px 12px; font-size: 16px; }
+  .ach-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+  .tile .medal { --medal-size: 64px !important; }
+  .ach-when { display: none; }
+  .account-grid { margin-top: 100px; }
+  .account-identity .greeter { top: -112px; width: 140px; }
+  .welcome-wrap { gap: 20px; }
+  .welcome-side { width: 230px; }
+  .welcome-side .alborian { width: 210px; }
+  .bubble { margin-left: 0; font-size: 16px; }
+}
+
+/* The narrowest the window goes (960 px wide, 204 px of rail): a narrower Embry Star column, and
+   the welcome's Alborian under its panel. */
+@media (max-width: 1000px) {
+  .ach-columns { grid-template-columns: 220px 1fr; }
+  .embry-card { padding: 18px 16px; }
+  .embry-badge { width: 116px; }
+  .welcome-wrap { flex-direction: column; }
+  .welcome-side { width: auto; flex-direction: row; align-items: flex-end; justify-content: center; gap: 12px; }
+  .welcome-side .alborian { width: 150px; }
+}
+
+/* Narrower than the launcher's own window allows: a browser while designing. The rail becomes a
+   row of tabs on top. */
+@media (max-width: 760px) {
+  .shell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .rail { flex-direction: row; align-items: center; gap: 12px; padding: 12px 16px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--steel-line); }
+  .nav { display: flex; margin: 0; }
+  .nav-item { white-space: nowrap; }
+  .rail-foot, .alboria-chip, .alboria-state { display: none; }
+  .content, .welcome { padding: 24px 16px; }
+  .field-grid, .ach-columns { grid-template-columns: 1fr; }
+  .ach-side { position: static; }
+}
+.approve-code { font-family: var(--mono, ui-monospace, monospace); font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; text-align: center; }
+.approve-who { font-weight: 700; }

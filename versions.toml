@@ -1,0 +1,59 @@
+# Builds of Gears of War 3 (Xbox 360) the project knows.
+#
+# Read by the launcher (to recognise the game folder a player picks) and by scripts/build.sh (to
+# pick the ReXGlue manifest that matches runtime/game/default.xex).
+#
+# A build is identified by the SHA-256 of its default.xex. Two disc editions can share one
+# manifest when their executables differ only in the header (signature, media ID, region) and
+# carry the same encrypted code: the recompiled code is then the same. The media ID names the
+# disc edition and is shown to the player. Every value here comes from a real dump.
+
+# Title ID every Gears of War 3 executable carries. A folder with another title ID is another game.
+title_id = "4D5308AB"
+
+# World edition. Languages: INT, FRA, PTB, CHN, KOR, POL, RUS, CZE, HUN.
+[[versions]]
+id = "world"
+name = "World"
+media_id = "58122AD6"
+xex_sha256 = "4e5d00b8f584f42951344b26a2ae8292bb30c7634b1a75cec0c70a80b3f8f790"
+manifest = "runtime/azura_58122AD6.toml"
+
+# Spanish edition. Languages: INT, ESN. Its default.xex differs from the World one only before
+# offset 0x4000 (RSA signature, media ID, header digest, region); the AES key and the encrypted
+# code are identical, so it uses the World manifest.
+[[versions]]
+id = "spain"
+name = "España"
+media_id = "6EF14DF9"
+xex_sha256 = "a3ee80eb8fdf8200bf00d6c4d61854d98e77afaad61cf9767d2d84b3073dbd83"
+manifest = "runtime/azura_58122AD6.toml"
+
+# Latin American edition. Languages: INT, ESM, PTB. Like the Spanish one, its default.xex differs
+# from the World one only before offset 0x4000 (media ID 02EEE060, region 000000FF); the AES key
+# and the encrypted code are identical, so it uses the World manifest.
+[[versions]]
+id = "latam"
+name = "Latinoamérica"
+media_id = "02EEE060"
+xex_sha256 = "08b60f297efa50847fe8cde12e0c7a714826c99fccc02557977d697966411917"
+manifest = "runtime/azura_58122AD6.toml"
+
+# To add another edition, hash its default.xex (`shasum -a 256 default.xex`) and compare it with
+# the World one (`cmp -l`). If every difference is in the header and the AES key matches, add an
+# entry pointing to an existing manifest; otherwise the code differs and it needs its own manifest
+# (copy runtime/azura_58122AD6.toml without its mid-function hooks, which are addresses of this
+# edition).
+
+# MoltenVK pin and verification hashes used by scripts/build_moltenvk.sh and scripts/build.sh.
+# ReXGlue SDK 0.10.0 ships MoltenVK 1.4.1 (`unpatched_sha256`), which has a swapchain recreation bug
+# that forces CAMetalLayer.drawableSize to 1x1 on fullscreen transitions. scripts/build_moltenvk.sh
+# builds `revision` with patches/*.patch applied and verifies the resulting dylib differs from the
+# unpatched SDK copy.
+[moltenvk]
+version = "1.4.1"
+revision = "db445ff2042d9ce348c439ad8451112f354b8d2a"
+unpatched_sha256 = "67c280adaf6e36f1cdc181c0e14c62f2f2a547d03682b235e75111b5454e9845"
+patched_sha256 = "abff2231a85d54848ca7ce82d347f9c3a921bc0e2ac5f0b62243b2c9be2923fd"
+
+

@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azura Launcher</title>
+  <!-- Bundled OFL fonts (see scripts/fetch-fonts.mjs), so the launcher works offline. Oswald
+       covers Cyrillic, which the Latin-only display fonts lack. -->
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Lambent backdrop: dark rock with glowing imulsion veins and drifting spores. Decorative only. -->
+  <div class="backdrop" aria-hidden="true">
+    <!-- The veins pulse between a dim and a hot imulsion. Each is drawn twice, already glowing: a dim
+         layer that stays, and a hot layer per group of veins whose opacity alone is animated. The
+         glow is a full-screen blur, so it is drawn once; animating the strokes themselves made
+         WebKit redraw it every frame. -->
+    <div class="veins">
+      <svg class="vein-layer" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <radialGradient id="pool" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffd25a" stop-opacity=".55"/>
+            <stop offset="100%" stop-color="#ff9e1b" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="1040" cy="690" rx="260" ry="120" fill="url(#pool)"/>
+        <ellipse cx="160" cy="80" rx="180" ry="90" fill="url(#pool)" opacity=".5"/>
+        <g class="vein-group is-dim" filter="url(#glow)">
+          <path class="vein v1" d="M1200 640 C1080 610 1010 560 930 575 S790 640 700 610 S560 520 470 540"/>
+          <path class="vein v1" d="M190 120 C210 170 190 220 230 260"/>
+          <path class="vein v2" d="M930 575 C905 520 920 470 880 430 S800 390 770 340"/>
+          <path class="vein v2" d="M700 610 C680 660 640 690 600 760"/>
+          <path class="vein v3" d="M1200 720 C1120 700 1060 720 990 760"/>
+          <path class="vein v3" d="M0 120 C70 110 130 140 190 120 S300 60 360 80"/>
+        </g>
+      </svg>
+      <svg class="vein-layer is-hot hot-1" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice">
+        <defs>
+        <filter id="glow-1" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        </defs>
+        <g class="vein-group" filter="url(#glow-1)">
+          <path class="vein v1" d="M1200 640 C1080 610 1010 560 930 575 S790 640 700 610 S560 520 470 540"/>
+          <path class="vein v1" d="M190 120 C210 170 190 220 230 260"/>
+        </g>
+      </svg>
+      <svg class="vein-layer is-hot hot-2" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice">
+        <defs>
+        <filter id="glow-2" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        </defs>
+        <g class="vein-group" filter="url(#glow-2)">
+          <path class="vein v2" d="M930 575 C905 520 920 470 880 430 S800 390 770 340"/>
+          <path class="vein v2" d="M700 610 C680 660 640 690 600 760"/>
+        </g>
+      </svg>
+      <svg class="vein-layer is-hot hot-3" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice">
+        <defs>
+        <filter id="glow-3" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        </defs>
+        <g class="vein-group" filter="url(#glow-3)">
+          <path class="vein v3" d="M1200 720 C1120 700 1060 720 990 760"/>
+          <path class="vein v3" d="M0 120 C70 110 130 140 190 120 S300 60 360 80"/>
+        </g>
+      </svg>
+    </div>
+    <div class="spores"></div>
+    <div class="grain"></div>
+  </div>
+
+  <div class="shell">
+    <!-- Navigation rail -->
+    <nav class="rail" data-i18n-attr="aria-label:a11y.sections">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Azura</span>
+      </div>
+      <!-- Opens alboria.org, our online ecosystem (account.js). Hidden in the narrow layout. -->
+      <button class="alboria-chip" type="button" data-alboria-site><svg viewBox="0 0 40 40" aria-hidden="true"><defs><clipPath id="alboria-chip-front"><rect x="-5" y="20" width="50" height="25"/></clipPath></defs><ellipse cx="20" cy="20" rx="19" ry="6" fill="none" stroke="#5aa9f0" stroke-width="3" transform="rotate(-18 20 20)"/><circle cx="20" cy="20" r="12" fill="#ffe07a" stroke="#1e2a4f" stroke-width="3"/><g transform="rotate(-18 20 20)" clip-path="url(#alboria-chip-front)"><ellipse cx="20" cy="20" rx="19" ry="6" fill="none" stroke="#5aa9f0" stroke-width="3"/></g></svg><span data-i18n="rail.withAlboria"></span></button>
+      <!-- How Alboria is: online, maintenance until a time, online play off, update needed or
+           unreachable (renderService in main.js). Only with an Alboria account. -->
+      <p class="alboria-state" id="alboria-state" hidden><span class="dot"></span><span id="alboria-state-text"></span></p>
+      <!-- Each entry: a line icon and its name (the name in its own span, which translatePage fills). -->
+      <ul class="nav">
+        <li><button class="nav-item is-active" data-view="play"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="nav.play"></span></button></li>
+        <li><button class="nav-item" data-view="install"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="nav.install"></span></button></li>
+        <li><button class="nav-item" data-view="graphics"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg><span data-i18n="nav.graphics"></span></button></li>
+        <li><button class="nav-item" data-view="saves"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4"/></svg><span data-i18n="nav.saves"></span></button></li>
+        <li>
+          <!-- Shows a lock mark until the achievements can be read (see renderAchievements()). -->
+          <button class="nav-item" data-view="achievements" id="nav-achievements"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM6 5H3v2a4 4 0 0 0 4 4M18 5h3v2a4 4 0 0 1-4 4M12 13v4M8 20h8"/></svg><span data-i18n="nav.achievements"></span></button>
+        </li>
+        <li><button class="nav-item" data-view="account"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span data-i18n="nav.account"></span></button></li>
+      </ul>
+      <div class="rail-foot">
+        <!-- Shown when a newer launcher version is published; see setupUpdates() in main.js. -->
+        <button class="update-chip" id="update-button" hidden></button>
+        <!-- Updating restarts the launcher, so the button asks first (renderUpdate). -->
+        <div class="update-confirm" id="update-confirm" hidden>
+          <p id="update-confirm-text"></p>
+          <div class="update-confirm-actions">
+            <button class="btn btn-small btn-primary" id="update-confirm-yes" data-i18n="update.confirmYes"></button>
+            <button class="btn btn-small" id="update-confirm-no" data-pad-back data-i18n="update.cancel"></button>
+          </div>
+        </div>
+        <label class="field rail-language">
+          <span data-i18n="rail.language"></span>
+          <select id="ui-language"></select>
+        </label>
+        <span class="version">
+          <span id="launcher-version"></span>
+          <!-- Opens the "What's new" window again once it was closed (renderReleaseNotes). -->
+          <button class="version-link" id="release-notes-show" type="button" hidden data-i18n="releaseNotes.show"></button>
+        </span>
+        <span class="version" id="runtime-version"></span>
+      </div>
+    </nav>
+
+    <main class="content">
+      <!-- Who plays and how Alboria is, above every page (renderPlay and renderService). Beside the
+           title in wide windows, on its own row in narrow ones. -->
+      <p class="player-line" id="player-line" hidden><span class="dot"></span><span id="player-line-text"></span></p>
+      <!-- Alboria's notices and countdowns before scheduled actions, above every page (renderService). -->
+      <div class="alboria-notices" id="alboria-notices" hidden></div>
+      <!-- PLAY -->
+      <section class="view is-active" data-view="play" aria-labelledby="play-title">
+        <header class="page-head">
+          <!-- Both name the system the launcher runs on; renderPlay() fills them. -->
+          <p class="eyebrow" id="play-eyebrow"></p>
+          <h1 id="play-title" class="page-title" data-i18n="nav.play"></h1>
+          <p class="lede" id="play-lede"></p>
+        </header>
+
+        <div class="play-row">
+          <!-- Its label and action depend on the installation: "Play" when the game files are set,
+               "Install" (which opens the Installation view) when they are not. See renderPlay(). -->
+          <div class="launch">
+            <button class="btn-launch" id="launch">
+              <span class="btn-launch-label"></span>
+            </button>
+            <span class="btn-launch-sub" id="launch-sub"></span>
+          </div>
+        </div>
+
+        <!-- The game's parts on the left; Alboria (its state and the friends) on the right while
+             the player has an Alboria account. One column in narrow windows, the game's details first. -->
+        <div class="play-grid">
+          <div class="play-main">
+            <!-- An Alboria account made while codes were off, once codes are back: verify the email
+                 by the deadline, or the account is deleted (account.js, renderAccount). -->
+            <div class="verify-notice play-verify" id="play-verify" hidden>
+              <span class="dot"></span>
+              <p id="play-verify-text"></p>
+              <button class="btn btn-primary" id="play-verify-email" data-i18n="account.verifyEmail"></button>
+            </div>
+
+            <div class="status-list status-tiles">
+              <div class="status" id="status-game" data-state="warn">
+                <strong data-i18n="status.gameFiles"></strong><span class="status-detail"></span>
+              </div>
+              <div class="status" id="status-player" data-state="ok">
+                <strong data-i18n="status.player"></strong><span class="status-detail" id="status-player-detail"></span>
+              </div>
+              <div class="status" id="status-compiler" data-state="warn">
+                <strong data-i18n="status.compiler"></strong><span class="status-detail"></span>
+              </div>
+              <div class="status" id="status-runtime" data-state="warn">
+                <strong data-i18n="status.runtime"></strong><span class="status-detail"></span>
+              </div>
+              <!-- On Linux and Windows the processor and the graphics card are separate entries; on
+                   macOS the chip is both, so only the GPU entry shows. -->
+              <div class="status" id="status-cpu" data-state="ok" hidden>
+                <strong data-i18n="status.cpu"></strong><span class="status-detail" id="status-cpu-detail"></span>
+              </div>
+              <div class="status" data-state="ok">
+                <strong data-i18n="status.gpu"></strong><span class="status-detail" id="status-gpu-detail"></span>
+              </div>
+            </div>
+
+            <!-- A runtime build from the kit: its step, a bar and the time left, or why it failed;
+                 renderBuildCard() fills it. -->
+            <div class="panel build-card" id="build-card" hidden>
+              <div class="build-card-head">
+                <h2 class="panel-title" id="build-card-title"></h2>
+                <span class="build-card-percent" id="build-card-percent"></span>
+              </div>
+              <div class="build-bar"><span id="build-card-bar"></span></div>
+              <p class="help build-card-detail" id="build-card-detail"></p>
+              <div class="build-card-actions" id="build-card-actions" hidden>
+                <button class="btn btn-small btn-primary" id="build-card-retry" data-i18n="build.retry"></button>
+                <button class="btn btn-small" id="build-card-log" data-i18n="build.openLog"></button>
+              </div>
+            </div>
+
+            <!-- Prepare shaders: makes the shaders of earlier sessions before playing, with a bar while
+                 it runs; renderShaderCard() fills it. -->
+            <div class="panel build-card shader-card" id="shader-card" hidden>
+              <div class="build-card-head">
+                <h2 class="panel-title" data-i18n="shaders.title"></h2>
+                <span class="build-card-percent" id="shader-card-percent"></span>
+              </div>
+              <div class="build-bar" id="shader-card-bar-track" hidden><span id="shader-card-bar"></span></div>
+              <p class="help build-card-detail" id="shader-card-detail"></p>
+              <div class="build-card-actions">
+                <button class="btn btn-small" id="shader-card-prepare" data-i18n="shaders.prepare"></button>
+              </div>
+            </div>
+
+            <!-- Game log: shown while the game runs and after it ends or fails to start. -->
+            <div class="panel log-panel" id="game-log" hidden>
+              <div class="log-head">
+                <h2 class="panel-title" data-i18n="log.title"></h2>
+                <span class="log-state" id="game-log-state"></span>
+                <button class="btn btn-small" id="game-log-hide" data-i18n="log.hide"></button>
+              </div>
+              <pre class="log-body" id="game-log-body"></pre>
+            </div>
+
+            <!-- Azura (DEV) only: which Alboria server it talks to, so test accounts stay off the
+                 real one (setupDevServer in main.js). The published launcher never shows it. -->
+            <div class="panel" id="dev-server-panel" hidden>
+              <h2 class="panel-title" data-i18n="devServer.title"></h2>
+              <p class="help" data-i18n="devServer.help"></p>
+              <div class="path-row">
+                <select id="dev-server-choice">
+                  <option value="local" data-i18n="devServer.local"></option>
+                  <option value="production" data-i18n="devServer.production"></option>
+                  <option value="other" data-i18n="devServer.other"></option>
+                </select>
+                <input class="path" id="dev-server-url" type="text" maxlength="200" spellcheck="false" placeholder="http://192.168.1.20:8080" hidden>
+                <button class="btn btn-primary" id="dev-server-apply" data-i18n="devServer.apply"></button>
+              </div>
+              <p class="help" id="dev-server-now"></p>
+            </div>
+          </div>
+
+          <div class="play-side">
+            <!-- Why online rooms are out of reach: Alboria unreachable, in maintenance, the game's
+                 online play switched off, or a launcher too old for it (renderService). -->
+            <div class="panel is-alboria place-observatory service-panel" id="service-panel" hidden>
+              <span class="alb-place" id="service-panel-place" data-i18n="world.observatory"></span>
+              <img class="alborian" id="service-panel-art" src="world/night-owl.webp" alt="" width="120" height="124">
+              <div class="service-panel-text">
+                <p class="tagline">Alboria</p>
+                <h2 class="panel-title" id="service-panel-title"></h2>
+                <p class="help" id="service-panel-text"></p>
+                <p class="help" data-i18n="alboriaService.stillPlay"></p>
+                <div class="account-actions">
+                  <button class="btn btn-primary" id="service-panel-update" hidden data-i18n="alboriaService.getUpdate"></button>
+                  <button class="btn btn-primary" id="service-panel-retry" hidden data-i18n="account.retry"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Friends on Alboria: requests, invitations, and each friend with Join and their menu
+                 (friendsPanel.js). Only with an Alboria account. The Keeper watches over it. -->
+            <div class="panel is-alboria place-arrival friends-panel" id="friends-panel" hidden>
+              <span class="alb-place" data-i18n="world.arrival"></span>
+              <img class="alborian keeper" src="world/keeper.webp" alt="" width="110" height="128">
+              <div class="friends-head">
+                <p class="tagline">Alboria</p>
+                <h2 class="panel-title"><span data-i18n="friends.title"></span> <span class="friends-count" id="friends-count"></span></h2>
+                <!-- What the player shows their friends: the control itself takes the colour of the
+                     state chosen; its name is for screen readers only. -->
+                <label class="friends-availability">
+                  <span class="visually-hidden" data-i18n="friends.availability"></span>
+                  <select id="friends-availability">
+                    <option value="online" data-i18n="friends.availabilityOption.online"></option>
+                    <option value="busy" data-i18n="friends.availabilityOption.busy"></option>
+                    <option value="invisible" data-i18n="friends.availabilityOption.invisible"></option>
+                  </select>
+                </label>
+              </div>
+              <form class="friends-add" id="friends-add">
+                <input class="path" id="friends-add-name" type="text" maxlength="20" autocomplete="off" spellcheck="false" data-i18n-attr="placeholder:friends.addPlaceholder">
+                <button class="btn btn-primary" type="submit" data-i18n="friends.add"></button>
+              </form>
+              <div class="friends-body" id="friends-body"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INSTALL -->
+      <section class="view" data-view="install" aria-labelledby="install-title">
+        <header class="page-head">
+          <p class="eyebrow" data-i18n="install.eyebrow"></p>
+          <h1 id="install-title" class="page-title" data-i18n="install.title"></h1>
+        </header>
+        <div class="columns is-wide-left">
+          <div class="column">
+            <div class="panel">
+              <h2 class="panel-title" data-i18n="install.gameFolder"></h2>
+              <p class="help" data-i18n="install.gameFolderHelp"></p>
+              <div class="path-row">
+                <input class="path" id="game-path" type="text" readonly data-i18n-attr="placeholder:install.noFolder">
+                <button class="btn" id="pick-game" data-i18n="install.choose"></button>
+                <button class="btn" id="pick-game-image" data-i18n="install.chooseImage"></button>
+              </div>
+              <!-- Result of checking the folder; renderInstall() fills it. -->
+              <p class="check" id="game-check" hidden></p>
+              <!-- For an edition the launcher does not support yet: the details to report it with. -->
+              <div class="edition-report" id="edition-report" hidden>
+                <p class="help" data-i18n="install.editionReportHelp"></p>
+                <pre class="edition-report-details" id="edition-report-details"></pre>
+                <div class="path-row">
+                  <button class="btn btn-small" id="edition-report-copy" data-i18n="install.editionReportCopy"></button>
+                  <button class="btn btn-small" id="edition-report-open" data-i18n="install.editionReportOpen"></button>
+                </div>
+              </div>
+              <!-- The language of the game's text and voices, from those found in the game. -->
+              <div class="setting-row">
+                <div class="setting-text">
+                  <strong data-i18n="install.languageTitle"></strong>
+                  <small data-i18n="install.languageHelp"></small>
+                </div>
+                <select id="game-language" data-i18n-attr="aria-label:install.gameLanguage"></select>
+              </div>
+            </div>
+            <div class="panel">
+              <h2 class="panel-title" data-i18n="install.runtimeTitle"></h2>
+              <p class="help" data-i18n="install.runtimeHelp"></p>
+              <div class="path-row">
+                <!-- State of the installed runtime; renderInstall() fills it. -->
+                <p class="check" id="runtime-check"></p>
+                <button class="btn" id="install-runtime"></button>
+                <button class="btn btn-small" id="install-runtime-log" data-i18n="build.openLog" hidden></button>
+              </div>
+              <div class="build-bar" id="install-build-bar" hidden><span></span></div>
+            </div>
+            <!-- The C++ compiler the runtime is built with; renderCompiler() fills it. -->
+            <div class="panel" id="compiler-panel">
+              <h2 class="panel-title" data-i18n="install.compilerTitle"></h2>
+              <p class="help" data-i18n="install.compilerHelp"></p>
+              <p class="check" id="compiler-check"></p>
+              <div class="compiler-actions">
+                <button class="btn btn-primary" id="install-compiler" hidden></button>
+                <button class="btn" id="recheck-compiler" data-i18n="install.compilerCheckAgain"></button>
+              </div>
+              <p class="help compiler-manual" id="compiler-manual" hidden>
+                <span data-i18n="install.compilerManual"></span>
+                <code id="compiler-manual-command"></code>
+              </p>
+              <p class="help compiler-manual" id="compiler-manual-note" hidden></p>
+            </div>
+          </div>
+          <div class="column">
+            <!-- Downloadable content: the player's own packages; renderDlc() fills it. -->
+            <div class="panel" id="dlc-panel">
+              <h2 class="panel-title" data-i18n="install.dlcTitle"></h2>
+              <p class="help" data-i18n="install.dlcHelp"></p>
+              <div class="status-list dlc-list" id="dlc-list" aria-live="polite"></div>
+              <button class="btn btn-primary" id="add-dlc" data-i18n="install.dlcAdd"></button>
+            </div>
+            <!-- Report a problem: one .zip with what we need and nothing private (diagnostics.js). -->
+            <div class="panel" id="diagnostic-panel">
+              <h2 class="panel-title" data-i18n="diagnostic.title"></h2>
+              <p class="help" data-i18n="diagnostic.help"></p>
+              <button class="btn btn-primary" id="diagnostic-open" data-i18n="diagnostic.create"></button>
+              <div class="diagnostic-plan" id="diagnostic-plan" hidden>
+                <p class="help" data-i18n="diagnostic.listHelp"></p>
+                <ul class="diagnostic-list" id="diagnostic-list"></ul>
+                <p class="help" data-i18n="diagnostic.leftOut"></p>
+                <div class="path-row">
+                  <button class="btn btn-primary" id="diagnostic-save"></button>
+                  <button class="btn" id="diagnostic-cancel" data-pad-back data-i18n="diagnostic.cancel"></button>
+                </div>
+              </div>
+              <p class="check" id="diagnostic-result" aria-live="polite" hidden></p>
+              <button class="btn btn-small" id="diagnostic-show" data-i18n="diagnostic.show" hidden></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GRAPHICS: only the settings the runtime reads at start-up. The rest live in the game. -->
+      <section class="view" data-view="graphics" aria-labelledby="graphics-title">
+        <header class="page-head">
+          <p class="eyebrow" data-i18n="graphics.eyebrow"></p>
+          <h1 id="graphics-title" class="page-title" data-i18n="graphics.title"></h1>
+        </header>
+        <!-- Each choice is a <select>, the one the code reads and writes; selectMirror.js draws it as
+             buttons (the segmented ones and the list of resolutions) and keeps both in step. -->
+        <div class="columns is-wide-left">
+          <div class="panel">
+            <h2 class="panel-title" data-i18n="graphics.displayTitle"></h2>
+            <div class="setting-list">
+              <div class="setting-row">
+                <div class="setting-text">
+                  <strong data-i18n="graphics.mode"></strong>
+                  <small data-i18n="graphics.modeHelp"></small>
+                </div>
+                <select id="display-mode" class="is-mirrored" data-mirror="segmented" data-i18n-attr="aria-label:graphics.mode">
+                  <option value="windowed" data-i18n="graphics.windowed"></option>
+                  <option value="fullscreen" data-i18n="graphics.fullscreen"></option>
+                </select>
+              </div>
+              <!-- Only with two or more graphics cards (renderGpuChoice). -->
+              <div class="setting-row" id="gpu-field" hidden>
+                <div class="setting-text">
+                  <strong data-i18n="graphics.gpu"></strong>
+                  <small data-i18n="graphics.gpuHelp"></small>
+                </div>
+                <select id="gpu-choice" data-i18n-attr="aria-label:graphics.gpu"></select>
+              </div>
+              <!-- Minimized, the launcher costs the game nothing to draw (launch_game in lib.rs). -->
+              <div class="setting-row">
+                <div class="setting-text">
+                  <strong data-i18n="graphics.whilePlaying"></strong>
+                  <small data-i18n="graphics.whilePlayingHelp"></small>
+                </div>
+                <select id="while-playing" class="is-mirrored" data-mirror="segmented" data-i18n-attr="aria-label:graphics.whilePlaying">
+                  <option value="minimize" data-i18n="graphics.whilePlayingMinimize"></option>
+                  <option value="keepOpen" data-i18n="graphics.whilePlayingKeepOpen"></option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title" data-i18n="graphics.renderResolution"></h2>
+            <p class="help" data-i18n="graphics.renderResolutionHelp"></p>
+            <select id="resolution-scale" class="is-mirrored" data-mirror="list" data-i18n-attr="aria-label:graphics.renderResolution"></select>
+          </div>
+        </div>
+      </section>
+
+      <!-- SAVES -->
+      <section class="view" data-view="saves" aria-labelledby="saves-title">
+        <header class="page-head">
+          <p class="eyebrow" data-i18n="saves.eyebrow"></p>
+          <h1 id="saves-title" class="page-title" data-i18n="saves.title"></h1>
+        </header>
+        <div class="columns">
+          <div class="column">
+            <div class="panel">
+              <h2 class="panel-title" data-i18n="saves.statusTitle"></h2>
+              <p class="help" data-i18n="saves.statusHelp"></p>
+              <div class="status-badge save-status" id="save-status-badge" data-state="ok">
+                <span class="dot"></span>
+                <span id="save-status-text"></span>
+              </div>
+              <div class="save-metrics">
+                <div class="metric-card">
+                  <span class="metric-label" data-i18n="saves.checkpoints"></span>
+                  <strong class="metric-value" id="save-checkpoints-count">0</strong>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-label" data-i18n="saves.lastSaved"></span>
+                  <strong class="metric-value" id="save-last-modified">—</strong>
+                </div>
+              </div>
+              <p class="save-detail-msg" id="save-detail-msg"></p>
+              <div class="path-row">
+                <input class="path" id="save-path" type="text" readonly>
+                <button class="btn" id="open-saves-dir" data-i18n="saves.openFolder"></button>
+              </div>
+            </div>
+            <div class="panel">
+              <h2 class="panel-title" data-i18n="saves.actionsTitle"></h2>
+              <div class="save-actions-grid">
+                <div class="action-card">
+                  <div class="action-card-info">
+                    <strong data-i18n="saves.repair"></strong>
+                    <p class="help" data-i18n="saves.repairHelp"></p>
+                  </div>
+                  <button class="btn" id="btn-repair-saves" data-i18n="saves.repair"></button>
+                </div>
+                <div class="action-card">
+                  <div class="action-card-info">
+                    <strong data-i18n="saves.backup"></strong>
+                    <p class="help" data-i18n="saves.backupHelp"></p>
+                  </div>
+                  <button class="btn btn-primary" id="btn-backup-saves" data-i18n="saves.backup"></button>
+                </div>
+                <div class="action-card">
+                  <div class="action-card-info">
+                    <strong data-i18n="saves.clean"></strong>
+                    <p class="help" data-i18n="saves.cleanHelp"></p>
+                  </div>
+                  <button class="btn btn-danger" id="btn-reset-saves" data-i18n="saves.clean"></button>
+                </div>
+              </div>
+              <!-- Shown when resetting or restoring waits for the player to confirm replacing the saves. -->
+              <div class="path-row" id="saves-confirm" hidden>
+                <p class="check" data-state="error" id="saves-confirm-text"></p>
+                <button class="btn btn-danger" id="saves-confirm-yes"></button>
+                <button class="btn" id="saves-confirm-no" data-pad-back data-i18n="saves.cancel"></button>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <!-- Where the saves live: moving them makes a backup first (change_saves_folder in lib.rs). -->
+            <div class="panel">
+              <h2 class="panel-title" data-i18n="saves.folderTitle"></h2>
+              <p class="help" data-i18n="saves.folderHelp"></p>
+              <div class="path-row">
+                <input class="path" id="saves-path" type="text" readonly>
+                <button class="btn" id="pick-saves" data-i18n="install.change"></button>
+              </div>
+              <!-- Shown when the chosen folder already holds saves, to confirm replacing them. -->
+              <div class="path-row" id="saves-conflict" hidden>
+                <p class="check" data-state="error" id="saves-conflict-text"></p>
+                <button class="btn" id="saves-replace" data-i18n="install.savesReplace"></button>
+                <button class="btn" id="saves-cancel" data-pad-back data-i18n="install.savesCancel"></button>
+              </div>
+            </div>
+            <div class="panel">
+              <h2 class="panel-title" data-i18n="saves.backupsTitle"></h2>
+              <p class="help" data-i18n="saves.backupsHelp"></p>
+              <div id="backups-list" class="backups-list">
+                <p class="help" data-i18n="saves.noBackups"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACHIEVEMENTS: built by achievementsPage.js from what the runtime read from the game. -->
+      <section class="view view-achievements" data-view="achievements" aria-labelledby="achievements-title">
+        <header class="page-head ach-head">
+          <div>
+            <p class="eyebrow" id="achievements-eyebrow"></p>
+            <h1 id="achievements-title" class="page-title" data-i18n="achievements.title"></h1>
+          </div>
+          <div class="segmented" id="achievements-views" role="group" data-i18n-attr="aria-label:achievements.viewLabel">
+            <button type="button" data-mode="list" data-i18n="achievements.viewList"></button>
+            <button type="button" data-mode="badges" data-i18n="achievements.viewBadges"></button>
+            <button type="button" data-mode="acts" data-i18n="achievements.viewActs"></button>
+          </div>
+        </header>
+        <div id="achievements-banner"></div>
+        <div id="achievements-body"></div>
+      </section>
+
+      <!-- ACCOUNT: the player's Alboria account, or their local account (account.js). Alboria's
+           own panels: light, with the Greeter. -->
+      <section class="view" data-view="account" aria-labelledby="account-title">
+        <header class="page-head account-title-row">
+          <div>
+            <p class="eyebrow">Alboria</p>
+            <h1 id="account-title" class="page-title" data-i18n="account.title"></h1>
+          </div>
+          <button class="btn alboria-open" type="button" data-alboria-site><svg viewBox="0 0 40 40" aria-hidden="true"><defs><clipPath id="alboria-open-front"><rect x="-5" y="20" width="50" height="25"/></clipPath></defs><ellipse cx="20" cy="20" rx="19" ry="6" fill="none" stroke="#5aa9f0" stroke-width="3" transform="rotate(-18 20 20)"/><circle cx="20" cy="20" r="12" fill="#ffe07a" stroke="#1e2a4f" stroke-width="3"/><g transform="rotate(-18 20 20)" clip-path="url(#alboria-open-front)"><ellipse cx="20" cy="20" rx="19" ry="6" fill="none" stroke="#5aa9f0" stroke-width="3"/></g></svg><span>alboria.org</span></button>
+          <!-- Alboria's blog in the launcher's language (account.js). -->
+          <button class="btn alboria-open" type="button" data-alboria-blog><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="#ffe07a" stroke="#1e2a4f" stroke-width="3"/><path d="M13 27c1.5-7 6-12 14-15-1.5 8-6 12-14 15Z" fill="none" stroke="#1e2a4f" stroke-width="2.6" stroke-linejoin="round"/><path d="M13 27l6-6" stroke="#1e2a4f" stroke-width="2.6" stroke-linecap="round"/></svg><span data-i18n="account.blog"></span></button>
+          <!-- Alboria's official Discord server, through alboria.org/discord (account.js), with Discord's logo in the colours of the other two. -->
+          <button class="btn alboria-open" type="button" data-alboria-discord><svg viewBox="-1 -1 26 26" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" fill="#ffe07a" stroke="#1e2a4f" stroke-width="1.6" stroke-linejoin="round" paint-order="stroke"/></svg><span data-i18n="account.discord"></span></button>
+        </header>
+
+        <!-- Signed in to Alboria. -->
+        <div id="account-alboria" hidden>
+          <div class="columns account-grid">
+            <div class="panel is-alboria place-plaza account-identity">
+              <span class="alb-place" data-i18n="world.plaza"></span>
+              <img class="alborian greeter" src="world/greeter.webp" alt="" width="150" height="155">
+              <div class="panel-head-row">
+                <div>
+                  <h2 class="panel-title" data-i18n="account.identityTitle"></h2>
+                  <p class="help" data-i18n="account.identityHelp"></p>
+                </div>
+                <div class="status-badge account-badge" id="account-badge" data-state="warn">
+                  <span class="dot"></span><span id="account-badge-text"></span>
+                </div>
+              </div>
+              <div class="identity-card">
+                <span class="identity-name" id="account-name"></span><span class="identity-tag" id="account-tag"></span>
+              </div>
+              <p class="save-detail-msg" id="account-detail" aria-live="polite"></p>
+              <div class="field-grid one">
+                <label class="field">
+                  <span data-i18n="account.gamertag"></span>
+                  <input class="path" id="account-gamertag" type="text" maxlength="15" data-text-rule="gamertag" data-i18n-attr="placeholder:account.gamertagPlaceholder">
+                </label>
+                <div class="field">
+                  <span data-i18n="account.email"></span>
+                  <div class="path-row">
+                    <input class="path" id="account-email" type="text" readonly>
+                    <button class="btn" id="account-change-email" data-i18n="account.changeEmail"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="verify-notice" id="account-verify" hidden>
+                <span class="dot"></span>
+                <p id="account-verify-text"></p>
+                <button class="btn btn-primary" id="account-verify-email" hidden data-i18n="account.verifyEmail"></button>
+              </div>
+              <div class="account-actions">
+                <button class="btn btn-primary" id="account-save" hidden data-i18n="account.saveGamertag"></button>
+                <button class="btn" id="account-retry" hidden data-i18n="account.retry"></button>
+              </div>
+            </div>
+
+            <div class="panel is-alboria place-vault" id="account-devices-panel">
+              <span class="alb-place" data-i18n="world.vault"></span>
+              <h2 class="panel-title" data-i18n="account.devicesTitle"></h2>
+              <p class="help" data-i18n="account.devicesHelp"></p>
+              <div class="device-list" id="account-devices"></div>
+            </div>
+          </div>
+
+          <!-- The key of the Alboria overlay in the game (bind_alboria_overlay, settings.rs). -->
+          <div class="panel is-alboria place-plaza data-panel">
+            <span class="alb-place" data-i18n="world.plaza"></span>
+            <div>
+              <h2 class="panel-title" data-i18n="account.overlayTitle"></h2>
+              <p class="help" data-i18n="account.overlayHelp"></p>
+            </div>
+            <select id="overlay-key" data-i18n-attr="aria-label:account.overlayKey"></select>
+          </div>
+
+          <div class="panel is-alboria place-archive data-panel">
+            <span class="alb-place" data-i18n="world.archive"></span>
+            <div>
+              <h2 class="panel-title" data-i18n="account.dataTitle"></h2>
+              <p class="help" data-i18n="account.dataHelp"></p>
+            </div>
+            <div class="account-actions">
+              <button class="btn" id="account-approve-browser" data-i18n="account.approveBrowser"></button>
+              <button class="btn" id="account-export" data-i18n="account.download"></button>
+              <button class="btn" id="account-sign-out" data-i18n="account.signOut"></button>
+              <button class="btn btn-danger" id="account-delete" data-i18n="account.delete"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- A local account: no Alboria. -->
+        <div id="account-local" hidden>
+          <div class="panel is-alboria place-plaza account-local">
+            <span class="alb-place" data-i18n="world.plaza"></span>
+            <img class="alborian" src="world/greeter.webp" alt="" width="150" height="155">
+            <div class="account-local-text">
+              <div class="panel-head-row">
+                <div>
+                  <h2 class="panel-title" data-i18n="account.localTitle"></h2>
+                  <p class="help" data-i18n="account.localHelp"></p>
+                </div>
+                <div class="status-badge account-badge" data-state="none">
+                  <span class="dot"></span><span data-i18n="account.noAccount"></span>
+                </div>
+              </div>
+              <div class="field-grid one">
+                <label class="field">
+                  <span data-i18n="account.gamertag"></span>
+                  <input class="path" id="local-gamertag" type="text" maxlength="15" data-text-rule="gamertag" data-i18n-attr="placeholder:account.gamertagPlaceholder">
+                </label>
+              </div>
+              <div class="account-actions">
+                <button class="btn btn-primary" data-account-open="create" data-i18n="account.create"></button>
+                <button class="btn" data-account-open="signin" data-i18n="account.signIn"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- WHAT'S NEW: what this launcher version brings (from CHANGELOG.md), in a window over
+       the launcher: once after it is installed or updated, and again from the rail's link;
+       renderReleaseNotes() fills it. A long list scrolls inside it. While it is open, the controller
+       moves only between its controls (data-modal, gamepadNav.js), and Back or Escape closes it. -->
+  <div class="notes-dialog" id="release-notes" data-modal hidden>
+    <div class="panel is-alboria place-gate notes-box" role="dialog" aria-modal="true" aria-labelledby="release-notes-title">
+      <span class="alb-place" data-i18n="world.gate"></span>
+      <img class="alborian" src="world/greeter.webp" alt="" width="104" height="107">
+      <div class="release-notes-text">
+        <h2 class="tagline" id="release-notes-title"></h2>
+        <ul class="release-notes-list" id="release-notes-list"></ul>
+        <button class="btn btn-small btn-primary" id="release-notes-dismiss" data-pad-back data-i18n="releaseNotes.dismiss"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WELCOME: the account the player plays with, the first time the launcher opens (also after an
+       update from a launcher without accounts), and the account's dialogs (account.js). A page over
+       the whole window, on the backdrop: the steps in Alboria's light panel, and beside it an
+       Alborian with a word for the step (data-step, set by showStep). While it is open, the
+       controller moves only between its controls (data-modal, gamepadNav.js). -->
+  <div class="welcome" id="welcome" data-modal hidden>
+    <div class="welcome-page">
+      <header class="page-head welcome-head">
+        <p class="eyebrow" data-i18n="welcome.eyebrow"></p>
+        <h1 class="page-title" id="welcome-heading" data-i18n="welcome.title"></h1>
+        <p class="lede" data-i18n="welcome.lede"></p>
+      </header>
+      <div class="welcome-wrap">
+      <div class="welcome-box panel is-alboria place-gate" role="dialog" aria-modal="true" aria-labelledby="welcome-heading">
+        <span class="alb-place" data-i18n="world.gate"></span>
+      <div data-step="choose">
+        <p class="tagline">Alboria</p>
+        <h2 class="panel-title" data-i18n="welcome.chooseTitle"></h2>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="welcome-choices">
+          <button class="choice is-main" data-welcome-go="create"><span class="choice-text"><strong data-i18n="welcome.create"></strong><span data-i18n="welcome.createHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+          <button class="choice" data-welcome-go="signin"><span class="choice-text"><strong data-i18n="welcome.signIn"></strong><span data-i18n="welcome.signInHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+          <button class="choice" data-welcome-go="local"><span class="choice-text"><strong data-i18n="welcome.local"></strong><span data-i18n="welcome.localHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+        </div>
+      </div>
+
+      <form data-step="create" hidden>
+        <h2 class="panel-title" data-i18n="welcome.createTitle"></h2>
+        <div class="field-grid one">
+          <label class="field"><span data-i18n="account.gamertag"></span><input class="path" id="create-gamertag" type="text" maxlength="15" data-text-rule="gamertag" autocomplete="nickname"></label>
+          <label class="field"><span data-i18n="account.email"></span><input class="path" id="create-email" type="text" inputmode="email" autocomplete="email" maxlength="254" data-text-rule="email"></label>
+        </div>
+        <p class="codes-off-note" id="create-codes-off" hidden data-i18n="welcome.codesOffCreate"></p>
+        <p class="help consent-text" data-i18n="welcome.privacy"></p>
+        <label class="consent"><input type="checkbox" id="create-consent"> <span data-i18n="welcome.consent"></span></label>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
+          <button class="btn btn-primary" type="submit" id="create-submit" data-i18n="welcome.sendCode"></button>
+        </div>
+      </form>
+
+      <form data-step="signin" hidden>
+        <h2 class="panel-title" data-i18n="welcome.signInTitle"></h2>
+        <p class="help" data-i18n="welcome.signInText"></p>
+        <p class="codes-off-note" id="signin-codes-off" hidden data-i18n="welcome.codesOffSignIn"></p>
+        <div class="field-grid one">
+          <label class="field"><span data-i18n="account.email"></span><input class="path" id="signin-email" type="text" inputmode="email" autocomplete="email" maxlength="254" data-text-rule="email"></label>
+        </div>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="welcome.sendCode"></button>
+        </div>
+      </form>
+
+      <form data-step="email" hidden>
+        <h2 class="panel-title" data-i18n="account.emailTitle"></h2>
+        <p class="help" data-i18n="account.emailText"></p>
+        <div class="field-grid one">
+          <label class="field"><span data-i18n="account.newEmail"></span><input class="path" id="new-email" type="text" inputmode="email" autocomplete="email" maxlength="254" data-text-rule="email"></label>
+        </div>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="welcome.sendCode"></button>
+        </div>
+      </form>
+
+      <form data-step="delete" hidden>
+        <h2 class="panel-title" data-i18n="account.deleteTitle"></h2>
+        <p class="help" id="delete-text"></p>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel"></button>
+          <button class="btn btn-danger" type="submit" data-i18n="welcome.sendCode"></button>
+        </div>
+      </form>
+
+      <!-- Approving a browser on Alboria's website (account.js): the code it shows, then which browser
+           asks and from roughly where, to allow it or not. -->
+      <form data-step="approve" hidden>
+        <h2 class="panel-title" data-i18n="account.approveTitle"></h2>
+        <p class="help" data-i18n="account.approveText"></p>
+        <div class="field-grid one">
+          <label class="field"><span data-i18n="account.approveCode"></span><input class="path approve-code" id="approve-code" type="text" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH"></label>
+        </div>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="account.approveCheck"></button>
+        </div>
+      </form>
+
+      <form data-step="approve-confirm" hidden>
+        <h2 class="panel-title" data-i18n="account.approveAsk"></h2>
+        <p class="help approve-who" id="approve-who"></p>
+        <p class="help" data-i18n="account.approveWarning"></p>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" id="approve-refuse" data-pad-back data-i18n="account.approveRefuse"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="account.approveAllow"></button>
+        </div>
+      </form>
+
+      <form data-step="code" hidden>
+        <h2 class="panel-title" data-i18n="welcome.codeTitle"></h2>
+        <p class="help" id="code-text"></p>
+        <label class="code-field">
+          <span class="visually-hidden" data-i18n="welcome.codeLabel"></span>
+          <input id="code-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" data-text-rule="code">
+          <span class="code-boxes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span>
+        </label>
+        <p class="save-detail-msg is-error" data-step-error hidden></p>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
+          <button class="btn" type="button" id="code-resend"></button>
+          <button class="btn btn-primary" type="submit" id="code-confirm" data-i18n="welcome.confirm"></button>
+        </div>
+      </form>
+
+      <div data-step="done" hidden>
+        <h2 class="panel-title" id="done-title"></h2>
+        <div class="identity-card"><span class="identity-name" id="done-name"></span><span class="identity-tag" id="done-tag"></span></div>
+        <p class="help" id="done-text"></p>
+        <div class="account-actions"><button class="btn btn-primary" data-welcome-close data-pad-back data-i18n="welcome.start"></button></div>
+      </div>
+
+      <form data-step="local" hidden>
+        <h2 class="panel-title" data-i18n="welcome.localTitle"></h2>
+        <p class="help" data-i18n="welcome.localText"></p>
+        <div class="field-grid one">
+          <label class="field"><span data-i18n="account.gamertag"></span><input class="path" id="welcome-local-gamertag" type="text" maxlength="15" data-text-rule="gamertag"></label>
+        </div>
+        <div class="account-actions">
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="welcome.start"></button>
+        </div>
+      </form>
+      </div>
+      <!-- The Alborian of the step and what it says (the Greeter, or the Courier with the code). -->
+      <div class="welcome-side" aria-hidden="true">
+        <p class="bubble">
+          <span data-bubble="greet" data-i18n="welcome.bubbleGreet"></span>
+          <span data-bubble="code" data-i18n="welcome.bubbleCode"></span>
+          <span data-bubble="done" data-i18n="welcome.bubbleDone"></span>
+        </p>
+        <img class="alborian" data-who="greeter" src="world/greeter.webp" alt="" width="260" height="268">
+        <img class="alborian" data-who="courier" src="world/courier.webp" alt="" width="260" height="268">
+      </div>
+      </div>
+    </div>
+  </div>
+  <!-- The controller buttons and what they do, while a controller is in use (gamepadNav.js). Outside
+       the shell, so it stays above the on-screen keyboard. -->
+  <div class="pad-hints" id="pad-hints" hidden></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
