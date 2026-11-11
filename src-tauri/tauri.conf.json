@@ -1,0 +1,79 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Azura Launcher",
+  "version": "0.6.8",
+  "identifier": "com.gears3azura.launcher",
+  "build": {
+    "frontendDist": "../src",
+    "beforeBuildCommand": "node scripts/generate-licenses.mjs"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Azura Launcher",
+        "width": 1200,
+        "height": 760,
+        "minWidth": 960,
+        "minHeight": 620,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "theme": "Dark",
+        "backgroundColor": "#0a0b0c"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "app",
+      "dmg"
+    ],
+    "category": "Game",
+    "shortDescription": "Launcher for the Azura native port",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "signingIdentity": "-"
+    },
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": [
+          "English",
+          "Spanish",
+          "French",
+          "German",
+          "Italian",
+          "Portuguese",
+          "Russian",
+          "Japanese",
+          "Korean",
+          "TradChinese"
+        ]
+      }
+    },
+    "resources": {
+      "../LICENSE": "licenses/LICENSE",
+      "../THIRD_PARTY_NOTICES.md": "licenses/THIRD_PARTY_NOTICES.md",
+      "licenses/rust-crates.txt": "licenses/rust-crates.txt"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ0NDAwQTU2QzEyNzMzRkQKUldUOU15ZkJWZ3BBMUcvRlpVTTRsTG9kWklhajgzRWxPcEZ2VGdGamg0TjRYbEVoeGNYMmo2ZnkK",
+      "endpoints": [
+        "https://updates.alboria.org/launcher-updates/latest.json"
+      ]
+    }
+  }
+}

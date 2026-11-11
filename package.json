@@ -1,0 +1,14 @@
+{
+  "name": "azura-launcher",
+  "version": "0.6.8",
+  "private": true,
+  "license": "PolyForm-Strict-1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "scripts/build-launcher.sh",
+    "test": "node --test \"test/**/*.test.mjs\""
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.1"
+  }
+}

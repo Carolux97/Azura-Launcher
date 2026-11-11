@@ -1,0 +1,12 @@
+# The player kit every launcher release bundles: what the launcher needs to build the game on a
+# player's machine (the runtime's compiled code and the commands to link it). It is proprietary
+# and lives in the private Azura runtime repository, whose "Publish kit" workflow builds it and
+# uploads it to https://updates.alboria.org/kits/<revision>/azura-kit-<platform>.tar.gz; that
+# workflow prints the lines to paste here. scripts/fetch-kit.sh downloads the pinned kit and checks
+# it against these hashes.
+revision = ""
+
+[sha256]
+mac-arm64 = ""
+linux-amd64 = ""
+win-amd64 = ""

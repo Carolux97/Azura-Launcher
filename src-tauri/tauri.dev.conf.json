@@ -1,0 +1,33 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Azura (DEV)",
+  "identifier": "com.gears3azura.launcher.dev",
+  "app": {
+    "windows": [
+      {
+        "title": "Azura (DEV)",
+        "width": 1200,
+        "height": 760,
+        "minWidth": 960,
+        "minHeight": 620,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "theme": "Dark",
+        "backgroundColor": "#0a0b0c"
+      }
+    ]
+  },
+  "bundle": {
+    "targets": [
+      "app"
+    ],
+    "icon": [
+      "icons/dev/32x32.png",
+      "icons/dev/128x128.png",
+      "icons/dev/128x128@2x.png",
+      "icons/dev/icon.icns",
+      "icons/dev/icon.ico"
+    ]
+  }
+}
