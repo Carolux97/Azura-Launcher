@@ -6,6 +6,13 @@ it as the update's notes (`scripts/release-common.sh`). Bumping the version adds
 release without one fails. One list item (`- `) per change, in English; an item may continue on
 indented lines.
 
+## 0.6.9
+
+- An edition of the game the launcher does not support yet is reported on Alboria's official
+  Discord: Installation copies its details and Report on Discord opens the server.
+- The launcher now comes from its own repository, and the part that builds the game is a separate
+  kit; nothing changes in how you install, update or play.
+
 ## 0.6.8
 
 - The game's log notes every audio dropout (a moment of silence because the game's audio came
