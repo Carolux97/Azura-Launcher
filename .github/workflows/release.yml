@@ -84,7 +84,13 @@ jobs:
           publish=false
           build=false
           if [[ "${PULL_REQUEST}" == true ]]; then
-            build=true
+            # A pull request checks the pipeline with the pinned kit; until kit.toml pins one there
+            # is nothing to bundle, so it builds nothing.
+            if grep -q '^revision = ""' kit.toml; then
+              echo "::notice::kit.toml pins no kit yet: the launchers are not built."
+            else
+              build=true
+            fi
           elif [[ "${status}" == new && ( "${MANUAL}" != true || "${MANUAL_PUBLISH}" == true ) ]]; then
             publish=true
             build=true
