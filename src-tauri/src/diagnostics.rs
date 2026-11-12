@@ -337,8 +337,16 @@ struct Entry {
     included: bool,
 }
 
-/// The newest game logs (`runtime/logs/azura_N.log`) that hold something, newest first: a run
-/// that only listed the graphics cards leaves an empty one.
+/// What a run that started the game writes once its module is about to launch (the runtime's
+/// `OnPreLaunchModule`). A run started for a one-off task (listing the graphics cards on every Play,
+/// exporting the achievements, installing a DLC) exits before it, after writing its own short log.
+const GAME_RUN_MARKER: &str = "[Azura] Active gamertag";
+
+/// The newest game logs (`runtime/logs/azura_N.log`) of runs that started the game, newest first.
+/// The launcher lists the graphics cards each time Play is pressed, and each listing leaves a log of
+/// the Vulkan start-up: kept by date alone, those pushed the session the player needed help with
+/// out of the file. A log that is empty or of a one-off task is left out; with no game run at all
+/// (an older runtime, or the game never got that far), the newest logs that hold something go in.
 fn game_logs(data_dir: &Path) -> Vec<PathBuf> {
     let Ok(entries) = fs::read_dir(data_dir.join("runtime").join("logs")) else {
         return Vec::new();
@@ -357,7 +365,25 @@ fn game_logs(data_dir: &Path) -> Vec<PathBuf> {
         })
         .collect();
     logs.sort_by_key(|log| std::cmp::Reverse(log.0));
-    logs.into_iter().take(GAME_LOGS).map(|(_, path)| path).collect()
+    let logs: Vec<PathBuf> = logs.into_iter().map(|(_, path)| path).collect();
+    let game_runs: Vec<PathBuf> = logs.iter().filter(|path| started_the_game(path)).take(GAME_LOGS).cloned().collect();
+    if game_runs.is_empty() {
+        logs.into_iter().take(GAME_LOGS).collect()
+    } else {
+        game_runs
+    }
+}
+
+/// Whether the log's start shows the run started the game (`GAME_RUN_MARKER`).
+fn started_the_game(path: &Path) -> bool {
+    let Ok(file) = File::open(path) else {
+        return false;
+    };
+    let mut head = Vec::new();
+    if file.take(LOG_HEAD).read_to_end(&mut head).is_err() {
+        return false;
+    }
+    String::from_utf8_lossy(&head).contains(GAME_RUN_MARKER)
 }
 
 /// The newest game build's folder (`build/<game build id>`), by its build log.
@@ -924,8 +950,13 @@ mod tests {
             fs::write(logs.join(format!("azura_{n}.log")), format!("run {n}\n{LOG}")).unwrap();
             std::thread::sleep(Duration::from_millis(15));
         }
-        // The newest run only listed the graphics cards: its log is empty and is skipped.
+        // An empty log, and the newest runs only listed the graphics cards (each Play does): their
+        // logs hold the Vulkan start-up but not the game, and are skipped.
         fs::write(logs.join("azura_6.log"), "").unwrap();
+        for n in 7..=9 {
+            std::thread::sleep(Duration::from_millis(15));
+            fs::write(logs.join(format!("azura_{n}.log")), "[info] Vulkan: using Apple M4 (chosen automatically)\n").unwrap();
+        }
         fs::write(
             data.join("runtime").join("azura.toml"),
             "user_name = \"NightHawk77\"\ngame_data_root = \"/Users/marisol.vega/Games/Gears of War 3 (Spain)\"\n\
@@ -1002,6 +1033,20 @@ mod tests {
         assert_eq!(launcher, "ui_language = \"es\"\naccount = \"alboria\"\ngpu = \"chosen\"\n");
         assert!(entries[0].1.contains("Newest game run: azura_5.log"), "{}", entries[0].1);
         assert!(!root.join("azura-diagnostic.zip.part").exists());
+    }
+
+    #[test]
+    fn without_a_game_run_the_newest_logs_go_in() {
+        let root = crate::test_support::TempFolder::new("diagnostics-no-game-run");
+        let logs = root.join("runtime").join("logs");
+        fs::create_dir_all(&logs).unwrap();
+        for n in 1..=4 {
+            fs::write(logs.join(format!("azura_{n}.log")), format!("[error] run {n} stopped before the game\n")).unwrap();
+            std::thread::sleep(Duration::from_millis(15));
+        }
+        let names: Vec<String> =
+            game_logs(&root).iter().map(|path| path.file_name().unwrap().to_string_lossy().into_owned()).collect();
+        assert_eq!(names, ["azura_4.log", "azura_3.log", "azura_2.log"]);
     }
 
     #[test]
