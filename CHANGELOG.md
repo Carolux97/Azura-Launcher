@@ -10,6 +10,10 @@ indented lines.
 
 - An edition of the game the launcher does not support yet is reported on Alboria's official
   Discord: Installation copies its details and Report on Discord opens the server.
+- Alboria's buttons are embroidered in gold, as on its planet: the sun's rays on the main
+  action, a vine on the others and thorns on the risky ones, and each carries the rune of what it
+  does (a door to sign in, a key for codes, a bud to create). Its panels have a golden frame with
+  a stitched seam and filigree in the corners.
 - The launcher now comes from its own repository, and the part that builds the game is a separate
   kit; nothing changes in how you install, update or play.
 

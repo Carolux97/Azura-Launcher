@@ -111,10 +111,12 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
 
   // --- Drawing -----------------------------------------------------------------------------
 
-  const button = (text, className, onClick) => {
+  // `rune` is the glyph on the button's seal (src/runes.css).
+  const button = (text, className, rune, onClick) => {
     const element = document.createElement("button");
     element.type = "button";
     element.className = className;
+    element.dataset.rune = rune;
     element.textContent = text;
     element.addEventListener("click", onClick);
     return element;
@@ -152,7 +154,7 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
       key === "lastSeen" ? t("friends.lastSeen", { when: formatWhen(vars.at) }) : t(`friends.${key}`, { game: gameName() });
     const actions = [];
     if (canJoin(friend, serviceBlock())) {
-      actions.push(button(t("friends.join"), "btn btn-small btn-primary", () => join("/v1/friends/room", { id: friend.id }, friend.name)));
+      actions.push(button(t("friends.join"), "btn btn-small btn-primary", "rooms", () => join("/v1/friends/room", { id: friend.id }, friend.name)));
     } else if (friend.presence?.status === "playing") {
       const pill = document.createElement("span");
       pill.className = "friend-pill";
@@ -162,13 +164,13 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
     // Inviting from the launcher only while the game runs (the game is then in a room).
     if (state.game === "running" && friend.presence?.status !== "offline") {
       actions.push(
-        button(t("friends.invite"), "btn btn-small", () => act("/v1/invitations", { friend: friend.id }, t("friends.invited", { name: friend.name }))),
+        button(t("friends.invite"), "btn btn-small", "bond", () => act("/v1/invitations", { friend: friend.id }, t("friends.invited", { name: friend.name }))),
       );
     }
     // The button that opens the friend's menu: three dots; while the menu is open it is marked and
     // shows an arrow that folds, so it reads as the way to close it again.
     const menuOpen = menuFor === friend.id;
-    const more = button(menuOpen ? "" : "⋯", `btn btn-small friend-more${menuOpen ? " is-open" : ""}`, () => {
+    const more = button(menuOpen ? "" : "⋯", `btn btn-small friend-more${menuOpen ? " is-open" : ""}`, "more", () => {
       menuFor = menuOpen ? null : friend.id;
       reportFor = null;
       render();
@@ -197,19 +199,19 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
     const menu = document.createElement("div");
     menu.className = "friend-menu";
     menu.append(
-      button(friend.favourite ? t("friends.unfavourite") : t("friends.favourite"), "btn btn-small", () => {
+      button(friend.favourite ? t("friends.unfavourite") : t("friends.favourite"), "btn btn-small", "star", () => {
         menuFor = null;
         act("/v1/friends/favourite", { id: friend.id, favourite: !friend.favourite });
       }),
-      button(t("friends.remove"), "btn btn-small", () => {
+      button(t("friends.remove"), "btn btn-small", "hands", () => {
         menuFor = null;
         act("/v1/friends/remove", { id: friend.id }, t("friends.removed", { name: friend.name }));
       }),
-      button(t("friends.block"), "btn btn-small btn-danger", () => {
+      button(t("friends.block"), "btn btn-small btn-danger", "block", () => {
         menuFor = null;
         act("/v1/friends/block", { id: friend.id }, t("friends.blocked", { name: friend.name }));
       }),
-      button(t("friends.report"), "btn btn-small btn-danger", () => {
+      button(t("friends.report"), "btn btn-small btn-danger", "shield", () => {
         menuFor = null;
         reportFor = friend.id;
         render();
@@ -235,7 +237,7 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
     form.append(
       reason,
       text,
-      button(t("friends.reportSend"), "btn btn-small btn-danger", async () => {
+      button(t("friends.reportSend"), "btn btn-small btn-danger", "shield", async () => {
         if (!text.value.trim()) {
           text.focus();
           return;
@@ -243,7 +245,7 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
         reportFor = null;
         await act("/v1/reports", { gamertag: friend.name, reason: reason.value, text: text.value.trim() }, t("friends.reported"));
       }),
-      button(t("friends.cancel"), "btn btn-small", () => {
+      button(t("friends.cancel"), "btn btn-small", "back", () => {
         reportFor = null;
         render();
       }),
@@ -272,24 +274,24 @@ export const setupFriends = ({ state, t, toast, inFront, serviceBlock, startGame
       personRow(
         t("friends.invitation", { name: invitation.from.name }),
         gameName(),
-        button(t("friends.join"), "btn btn-small btn-primary", () =>
+        button(t("friends.join"), "btn btn-small btn-primary", "rooms", () =>
           join("/v1/invitations/room", { id: invitation.id }, invitation.from.name),
         ),
-        button(t("friends.notNow"), "btn btn-small", () => act("/v1/invitations/decline", { id: invitation.id })),
+        button(t("friends.notNow"), "btn btn-small", "back", () => act("/v1/invitations/decline", { id: invitation.id })),
       ),
     );
     const incoming = lists.incoming.map((request) =>
       personRow(
         request.name,
         t("friends.wantsToBeFriend"),
-        button(t("friends.accept"), "btn btn-small btn-primary", () =>
+        button(t("friends.accept"), "btn btn-small btn-primary", "bond", () =>
           act("/v1/friends/accept", { id: request.id }, t("friends.nowFriends", { name: request.name })),
         ),
-        button(t("friends.decline"), "btn btn-small", () => act("/v1/friends/decline", { id: request.id })),
+        button(t("friends.decline"), "btn btn-small", "back", () => act("/v1/friends/decline", { id: request.id })),
       ),
     );
     const outgoing = lists.outgoing.map((request) =>
-      personRow(request.name, t("friends.pending"), button(t("friends.cancel"), "btn btn-small", () => act("/v1/friends/cancel", { id: request.id }))),
+      personRow(request.name, t("friends.pending"), button(t("friends.cancel"), "btn btn-small", "back", () => act("/v1/friends/cancel", { id: request.id }))),
     );
     const friends = sortFriends(lists.friends).map(friendRow);
     const empty = document.createElement("p");

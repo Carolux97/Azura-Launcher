@@ -398,6 +398,7 @@ export const setupAccount = ({ state, persist, renderPlay, toast, t, getLocale }
     } else {
       const remove = document.createElement("button");
       remove.className = "btn btn-small";
+      remove.dataset.rune = "block";
       remove.textContent = t("account.remove");
       remove.addEventListener("click", async () => {
         try {
