@@ -1,6 +1,6 @@
 [package]
 name = "azura-launcher"
-version = "0.6.9"
+version = "0.6.10"
 description = "Launcher for the Azura native port"
 authors = ["Azura contributors"]
 license = "PolyForm-Strict-1.0.0"

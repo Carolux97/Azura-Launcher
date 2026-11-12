@@ -6,6 +6,12 @@ it as the update's notes (`scripts/release-common.sh`). Bumping the version adds
 release without one fails. One list item (`- `) per change, in English; an item may continue on
 indented lines.
 
+## 0.6.10
+
+- A diagnostic file made after playing now holds that game session's logs. Until now the
+  launcher's own quick checks of the graphics cards, made each time you press Play, could take
+  their place, so a report about a problem in the game came without it.
+
 ## 0.6.9
 
 - An edition of the game the launcher does not support yet is reported on Alboria's official
