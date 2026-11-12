@@ -528,10 +528,16 @@ code, kbd {
 /* The glass: pearl over the blurred place, a thin white edge. */
 .panel.is-alboria::after {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 26px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 242, 255, 0.74) 55%, rgba(236, 243, 252, 0.78));
+  /* Filigree curls in from each corner (src/runes.css), over the pearl. */
+  background:
+    var(--filigree-tl) left 2px top 2px / 48px 48px no-repeat, var(--filigree-tr) right 2px top 2px / 48px 48px no-repeat,
+    var(--filigree-bl) left 2px bottom 2px / 48px 48px no-repeat, var(--filigree-br) right 2px bottom 2px / 48px 48px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 242, 255, 0.74) 55%, rgba(236, 243, 252, 0.78));
   backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 2px 0 #fff, 0 18px 40px -22px rgba(24, 34, 63, 0.55);
+  border: 0;
+  /* A golden frame, as the website's bar has, with a seam stitched inside it. */
+  box-shadow: inset 0 2px 0 #fff, 0 0 0 2px #fff3cc, 0 0 0 3.5px #d8b866, 0 0 0 4.5px rgba(80, 50, 10, 0.2), 0 18px 40px -22px rgba(24, 34, 63, 0.55);
+  outline: 1.5px dashed rgba(201, 152, 56, 0.45); outline-offset: -9px;
 }
 .place-arrival { --place: url("world/llegada-1280.webp"); }
 .place-plaza { --place: url("world/plaza-1280.webp"); }
@@ -561,7 +567,7 @@ code, kbd {
   --seal-light: #2f5ea8; --seal-dark: #1b2f63; --seal-rune: var(--rune-ring-light);
   --groove: rgba(216, 184, 102, 0.55);
   position: relative; isolation: isolate;
-  padding: 7px 24px 7px 44px; margin: 0 10px; border: 0; border-radius: 999px; color: var(--ink-alb);
+  padding: 7px 24px 7px 44px; margin: 0 16px; border: 0; border-radius: 999px; color: var(--ink-alb);
   font-family: var(--font-alb); font-weight: 800; font-size: 16px; letter-spacing: 0.01em; text-transform: none;
   /* The seal and its rune share one centre: the rune's box is centred in the seal's. */
   --seal: radial-gradient(circle closest-side, var(--seal-light) 0, var(--seal-dark) 78%, var(--frame-hi) 82%, var(--frame-hi) 92%, transparent 97%);
@@ -573,15 +579,19 @@ code, kbd {
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, 0.85), inset 0 -3px 6px rgba(120, 70, 0, 0.2),
     0 0 0 2px var(--frame-hi), 0 0 0 4px var(--frame), 0 0 0 5px rgba(80, 50, 10, 0.25), 0 10px 24px -8px var(--halo);
-  outline: 1px solid var(--groove); outline-offset: -5px;
+  /* The groove, stitched in golden thread. */
+  outline: 1.5px dashed var(--groove); outline-offset: -5px;
   transition: transform 0.2s, box-shadow 0.25s, background-position 0.7s ease;
 }
+/* The embroidery, sewn out from each end of the frame (src/runes.css): the sun's rays on the amber
+   buttons, a vine on the pearl ones, thorns on the danger ones. */
 .is-alboria .btn::before, .is-alboria .btn::after {
-  content: ""; position: absolute; top: 50%; width: 9px; height: 9px; z-index: -1;
-  background: linear-gradient(135deg, var(--frame-hi), var(--frame)); border-radius: 0 60% 0 60%; box-shadow: 0 0 8px var(--halo);
+  content: ""; position: absolute; top: 50%; width: 16px; height: 24px; z-index: -1; translate: 0 -50%;
+  background: var(--embroidery, var(--embroidery-vine)) center / contain no-repeat;
+  filter: drop-shadow(0 0 3px var(--halo));
 }
-.is-alboria .btn::before { left: -9px; translate: 0 -50%; rotate: -45deg; }
-.is-alboria .btn::after { right: -9px; translate: 0 -50%; rotate: 135deg; }
+.is-alboria .btn::before { left: -15px; scale: -1 1; }
+.is-alboria .btn::after { right: -15px; }
 .is-alboria .btn:hover:not([disabled]) {
   transform: translateY(-2px); color: var(--ink-alb); filter: none;
   background-position: 10px 50%, 5px 50%, -60% 0, 0 0;
@@ -593,17 +603,21 @@ code, kbd {
 .is-alboria .btn-primary {
   --stone: linear-gradient(180deg, #fff3c4 0%, #ffd866 45%, #f4b33a 100%);
   --frame: #c99838; --frame-hi: #ffe9a8; --halo: rgba(255, 196, 70, 0.55);
-  --seal-light: #8a5a12; --seal-dark: #5a3a0a; --seal-rune: var(--rune-ring-warm); --groove: rgba(255, 255, 255, 0.55);
+  --seal-light: #8a5a12; --seal-dark: #5a3a0a; --seal-rune: var(--rune-ring-warm); --groove: rgba(176, 122, 32, 0.6);
+  --embroidery: var(--embroidery-sun);
   color: #2b1d04;
 }
 .is-alboria .btn.btn-primary:hover:not([disabled]) { color: #2b1d04; }
 .is-alboria .btn-danger {
   --stone: linear-gradient(180deg, #fff 0%, #fdeff0 50%, #f6dfe2 100%);
-  --seal-light: #b3202a; --seal-dark: #7a1119;
+  --seal-light: #b3202a; --seal-dark: #7a1119; --groove: rgba(179, 32, 42, 0.4);
+  --embroidery: var(--embroidery-thorn);
   color: var(--crimson);
 }
 .is-alboria .btn.btn-danger:hover:not([disabled]) { color: var(--crimson); }
-.is-alboria .btn-small { padding: 4px 16px 4px 36px; margin: 0 8px; font-size: 14px; background-position: 8px 50%, 3px 50%, 160% 0, 0 0; background-size: 16px 16px, 26px 26px, 250% 100%, auto; }
+.is-alboria .btn-small::before, .is-alboria .btn-small::after { width: 12px; height: 18px; }
+.is-alboria .btn-small::before { left: -11px; } .is-alboria .btn-small::after { right: -11px; }
+.is-alboria .btn-small { padding: 4px 16px 4px 36px; margin: 0 12px; font-size: 14px; background-position: 8px 50%, 3px 50%, 160% 0, 0 0; background-size: 16px 16px, 26px 26px, 250% 100%, auto; }
 .is-alboria .btn-small:hover:not([disabled]) { background-position: 8px 50%, 3px 50%, -60% 0, 0 0; }
 .is-alboria .btn[disabled] { opacity: 0.45; }
 .is-alboria .path,
@@ -1442,7 +1456,20 @@ body:has(> .welcome:not([hidden])) .shell { visibility: hidden; }
 }
 /* The main choice wears the golden frame of Alboria's carved pieces. */
 .choice.is-main { background: rgba(255, 255, 255, 0.92); box-shadow: 0 0 0 2px #fff3cc, 0 0 0 3.5px #d8b866, 0 0 26px rgba(255, 214, 120, 0.5); }
-.choice-text { display: grid; gap: 2px; min-width: 0; }
+/* Each choice is a carved tablet: a seam stitched in gold, and a sigil with its rune on the left
+   (src/runes.css). */
+.choice { outline: 1.5px dashed rgba(201, 152, 56, 0.4); outline-offset: -6px; }
+.choice::before {
+  content: ""; flex: none; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--choice-rune, var(--rune-ring-gold)) center / 26px 26px no-repeat, radial-gradient(circle at 35% 30%, #fff, #fff6dc 60%, #f6e3b0);
+  box-shadow: inset 0 -2px 4px rgba(150, 110, 30, 0.2), 0 0 0 2px #fff3cc, 0 0 0 3.5px #d8b866, 0 0 14px rgba(255, 214, 120, 0.45);
+  transition: transform 0.6s ease;
+}
+.choice:hover::before, .choice:focus-visible::before { transform: rotate(-20deg); }
+.choice[data-rune="bud"] { --choice-rune: var(--rune-bud-gold); }
+.choice[data-rune="door"] { --choice-rune: var(--rune-door-gold); }
+.choice[data-rune="rooms"] { --choice-rune: var(--rune-rooms-gold); }
+.choice-text { flex: 1; display: grid; gap: 2px; min-width: 0; }
 .choice strong { font-weight: 800; font-size: 21px; }
 .choice-text > span { font-size: 15px; color: var(--night-soft); }
 .choice-arrow { flex: none; font-size: 30px; line-height: 1; color: #c98a10; }

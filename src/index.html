@@ -8,6 +8,7 @@
        covers Cyrillic, which the Latin-only display fonts lack. -->
   <link rel="stylesheet" href="fonts/fonts.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="runes.css">
 </head>
 <body>
   <!-- Lambent backdrop: dark rock with glowing imulsion veins and drifting spores. Decorative only. -->
@@ -163,7 +164,7 @@
             <div class="verify-notice play-verify" id="play-verify" hidden>
               <span class="dot"></span>
               <p id="play-verify-text"></p>
-              <button class="btn btn-primary" id="play-verify-email" data-i18n="account.verifyEmail"></button>
+              <button class="btn btn-primary" id="play-verify-email" data-i18n="account.verifyEmail" data-rune="quill"></button>
             </div>
 
             <div class="status-list status-tiles">
@@ -240,7 +241,7 @@
                   <option value="other" data-i18n="devServer.other"></option>
                 </select>
                 <input class="path" id="dev-server-url" type="text" maxlength="200" spellcheck="false" placeholder="http://192.168.1.20:8080" hidden>
-                <button class="btn btn-primary" id="dev-server-apply" data-i18n="devServer.apply"></button>
+                <button class="btn btn-primary" id="dev-server-apply" data-i18n="devServer.apply" data-rune="orbit"></button>
               </div>
               <p class="help" id="dev-server-now"></p>
             </div>
@@ -258,8 +259,8 @@
                 <p class="help" id="service-panel-text"></p>
                 <p class="help" data-i18n="alboriaService.stillPlay"></p>
                 <div class="account-actions">
-                  <button class="btn btn-primary" id="service-panel-update" hidden data-i18n="alboriaService.getUpdate"></button>
-                  <button class="btn btn-primary" id="service-panel-retry" hidden data-i18n="account.retry"></button>
+                  <button class="btn btn-primary" id="service-panel-update" hidden data-i18n="alboriaService.getUpdate" data-rune="pod"></button>
+                  <button class="btn btn-primary" id="service-panel-retry" hidden data-i18n="account.retry" data-rune="orbit"></button>
                 </div>
               </div>
             </div>
@@ -285,7 +286,7 @@
               </div>
               <form class="friends-add" id="friends-add">
                 <input class="path" id="friends-add-name" type="text" maxlength="20" autocomplete="off" spellcheck="false" data-i18n-attr="placeholder:friends.addPlaceholder">
-                <button class="btn btn-primary" type="submit" data-i18n="friends.add"></button>
+                <button class="btn btn-primary" type="submit" data-i18n="friends.add" data-rune="bond"></button>
               </form>
               <div class="friends-body" id="friends-body"></div>
             </div>
@@ -587,18 +588,18 @@
                   <span data-i18n="account.email"></span>
                   <div class="path-row">
                     <input class="path" id="account-email" type="text" readonly>
-                    <button class="btn" id="account-change-email" data-i18n="account.changeEmail"></button>
+                    <button class="btn" id="account-change-email" data-i18n="account.changeEmail" data-rune="quill"></button>
                   </div>
                 </div>
               </div>
               <div class="verify-notice" id="account-verify" hidden>
                 <span class="dot"></span>
                 <p id="account-verify-text"></p>
-                <button class="btn btn-primary" id="account-verify-email" hidden data-i18n="account.verifyEmail"></button>
+                <button class="btn btn-primary" id="account-verify-email" hidden data-i18n="account.verifyEmail" data-rune="quill"></button>
               </div>
               <div class="account-actions">
-                <button class="btn btn-primary" id="account-save" hidden data-i18n="account.saveGamertag"></button>
-                <button class="btn" id="account-retry" hidden data-i18n="account.retry"></button>
+                <button class="btn btn-primary" id="account-save" hidden data-i18n="account.saveGamertag" data-rune="star"></button>
+                <button class="btn" id="account-retry" hidden data-i18n="account.retry" data-rune="orbit"></button>
               </div>
             </div>
 
@@ -627,10 +628,10 @@
               <p class="help" data-i18n="account.dataHelp"></p>
             </div>
             <div class="account-actions">
-              <button class="btn" id="account-approve-browser" data-i18n="account.approveBrowser"></button>
-              <button class="btn" id="account-export" data-i18n="account.download"></button>
-              <button class="btn" id="account-sign-out" data-i18n="account.signOut"></button>
-              <button class="btn btn-danger" id="account-delete" data-i18n="account.delete"></button>
+              <button class="btn" id="account-approve-browser" data-i18n="account.approveBrowser" data-rune="key"></button>
+              <button class="btn" id="account-export" data-i18n="account.download" data-rune="pod"></button>
+              <button class="btn" id="account-sign-out" data-i18n="account.signOut" data-rune="door"></button>
+              <button class="btn btn-danger" id="account-delete" data-i18n="account.delete" data-rune="block"></button>
             </div>
           </div>
         </div>
@@ -657,8 +658,8 @@
                 </label>
               </div>
               <div class="account-actions">
-                <button class="btn btn-primary" data-account-open="create" data-i18n="account.create"></button>
-                <button class="btn" data-account-open="signin" data-i18n="account.signIn"></button>
+                <button class="btn btn-primary" data-account-open="create" data-i18n="account.create" data-rune="bud"></button>
+                <button class="btn" data-account-open="signin" data-i18n="account.signIn" data-rune="door"></button>
               </div>
             </div>
           </div>
@@ -678,7 +679,7 @@
       <div class="release-notes-text">
         <h2 class="tagline" id="release-notes-title"></h2>
         <ul class="release-notes-list" id="release-notes-list"></ul>
-        <button class="btn btn-small btn-primary" id="release-notes-dismiss" data-pad-back data-i18n="releaseNotes.dismiss"></button>
+        <button class="btn btn-small btn-primary" id="release-notes-dismiss" data-pad-back data-i18n="releaseNotes.dismiss" data-rune="star"></button>
       </div>
     </div>
   </div>
@@ -703,9 +704,9 @@
         <h2 class="panel-title" data-i18n="welcome.chooseTitle"></h2>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="welcome-choices">
-          <button class="choice is-main" data-welcome-go="create"><span class="choice-text"><strong data-i18n="welcome.create"></strong><span data-i18n="welcome.createHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
-          <button class="choice" data-welcome-go="signin"><span class="choice-text"><strong data-i18n="welcome.signIn"></strong><span data-i18n="welcome.signInHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
-          <button class="choice" data-welcome-go="local"><span class="choice-text"><strong data-i18n="welcome.local"></strong><span data-i18n="welcome.localHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+          <button class="choice is-main" data-welcome-go="create" data-rune="bud"><span class="choice-text"><strong data-i18n="welcome.create"></strong><span data-i18n="welcome.createHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+          <button class="choice" data-welcome-go="signin" data-rune="door"><span class="choice-text"><strong data-i18n="welcome.signIn"></strong><span data-i18n="welcome.signInHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
+          <button class="choice" data-welcome-go="local" data-rune="rooms"><span class="choice-text"><strong data-i18n="welcome.local"></strong><span data-i18n="welcome.localHelp"></span></span><span class="choice-arrow" aria-hidden="true">›</span></button>
         </div>
       </div>
 
@@ -720,8 +721,8 @@
         <label class="consent"><input type="checkbox" id="create-consent"> <span data-i18n="welcome.consent"></span></label>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
-          <button class="btn btn-primary" type="submit" id="create-submit" data-i18n="welcome.sendCode"></button>
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back" data-rune="back"></button>
+          <button class="btn btn-primary" type="submit" id="create-submit" data-i18n="welcome.sendCode" data-rune="key"></button>
         </div>
       </form>
 
@@ -734,8 +735,8 @@
         </div>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
-          <button class="btn btn-primary" type="submit" data-i18n="welcome.sendCode"></button>
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back" data-rune="back"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="welcome.sendCode" data-rune="key"></button>
         </div>
       </form>
 
@@ -747,8 +748,8 @@
         </div>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel"></button>
-          <button class="btn btn-primary" type="submit" data-i18n="welcome.sendCode"></button>
+          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel" data-rune="back"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="welcome.sendCode" data-rune="key"></button>
         </div>
       </form>
 
@@ -757,8 +758,8 @@
         <p class="help" id="delete-text"></p>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel"></button>
-          <button class="btn btn-danger" type="submit" data-i18n="welcome.sendCode"></button>
+          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel" data-rune="back"></button>
+          <button class="btn btn-danger" type="submit" data-i18n="welcome.sendCode" data-rune="key"></button>
         </div>
       </form>
 
@@ -772,8 +773,8 @@
         </div>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel"></button>
-          <button class="btn btn-primary" type="submit" data-i18n="account.approveCheck"></button>
+          <button class="btn" type="button" data-welcome-close data-pad-back data-i18n="welcome.cancel" data-rune="back"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="account.approveCheck" data-rune="key"></button>
         </div>
       </form>
 
@@ -783,8 +784,8 @@
         <p class="help" data-i18n="account.approveWarning"></p>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" id="approve-refuse" data-pad-back data-i18n="account.approveRefuse"></button>
-          <button class="btn btn-primary" type="submit" data-i18n="account.approveAllow"></button>
+          <button class="btn" type="button" id="approve-refuse" data-pad-back data-i18n="account.approveRefuse" data-rune="block"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="account.approveAllow" data-rune="key"></button>
         </div>
       </form>
 
@@ -798,9 +799,9 @@
         </label>
         <p class="save-detail-msg is-error" data-step-error hidden></p>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
-          <button class="btn" type="button" id="code-resend"></button>
-          <button class="btn btn-primary" type="submit" id="code-confirm" data-i18n="welcome.confirm"></button>
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back" data-rune="back"></button>
+          <button class="btn" type="button" id="code-resend" data-rune="quill"></button>
+          <button class="btn btn-primary" type="submit" id="code-confirm" data-i18n="welcome.confirm" data-rune="key"></button>
         </div>
       </form>
 
@@ -808,7 +809,7 @@
         <h2 class="panel-title" id="done-title"></h2>
         <div class="identity-card"><span class="identity-name" id="done-name"></span><span class="identity-tag" id="done-tag"></span></div>
         <p class="help" id="done-text"></p>
-        <div class="account-actions"><button class="btn btn-primary" data-welcome-close data-pad-back data-i18n="welcome.start"></button></div>
+        <div class="account-actions"><button class="btn btn-primary" data-welcome-close data-pad-back data-i18n="welcome.start" data-rune="bud"></button></div>
       </div>
 
       <form data-step="local" hidden>
@@ -818,8 +819,8 @@
           <label class="field"><span data-i18n="account.gamertag"></span><input class="path" id="welcome-local-gamertag" type="text" maxlength="15" data-text-rule="gamertag"></label>
         </div>
         <div class="account-actions">
-          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back"></button>
-          <button class="btn btn-primary" type="submit" data-i18n="welcome.start"></button>
+          <button class="btn" type="button" data-welcome-back data-pad-back data-i18n="welcome.back" data-rune="back"></button>
+          <button class="btn btn-primary" type="submit" data-i18n="welcome.start" data-rune="bud"></button>
         </div>
       </form>
       </div>
