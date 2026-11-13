@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="56" viewBox="0 0 240 56" role="img" aria-label="Download">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="0.55" stop-color="#ffb81c"/>
+      <stop offset="1" stop-color="#d9750a"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="238" height="54" rx="12" fill="url(#gold)" stroke="#16181b" stroke-opacity="0.35" stroke-width="2"/>
+  <g fill="none" stroke="#16181b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(30 15)">
+    <path d="M13 2v16M6 11l7 7 7-7M3 25h20"/>
+  </g>
+  <text x="140" y="36" text-anchor="middle" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="1.5" fill="#16181b">DOWNLOAD</text>
+</svg>

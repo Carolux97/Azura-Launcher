@@ -34,6 +34,13 @@ The interface is our own design with a theme inspired by the game. It uses only 
 and freely licensed fonts bundled with the app: no logos, fonts or images taken from the game or
 from its publishers.
 
+## Download
+
+Azura and its launcher are downloaded from our website, which picks the right installer for your
+system (macOS, Linux or Windows) and explains what you need before you start.
+
+<a href="https://alboria.org/en/azura/"><img src=".github/download-button.svg" alt="Download" width="240" height="56"></a>
+
 ## Languages
 
 The launcher follows the system language when it is one of the languages Gears of War 3 shipped
